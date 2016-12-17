@@ -1,0 +1,35 @@
+{
+  "name": "hofin",
+  "version": "1.0.0",
+  "description": "Home finance project",
+  "main": "main.js",
+  "scripts": {},
+  "author": "Anton Dimkov",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/electron": "^1.4.25",
+    "@types/flux": "0.0.33",
+    "@types/immutable": "^3.8.4",
+    "@types/node": "^6.0.46",
+    "@types/react-dom": "^0.14.18",
+    "@types/react-split-pane": "^0.1.4",
+    "bower": "^1.7.9",
+    "electron": "^1.4.5",
+    "electron-packager": "^8.4.0",
+    "glup": "^1.0.14",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-exec": "^2.1.3",
+    "gulp-less": "^3.3.0",
+    "gulp-npm-copy-deps": "^1.0.2",
+    "gulp-sequence": "^0.4.6",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-typescript": "^3.1.2",
+    "typescript": "^2.0.6"
+  },
+  "dependencies": {
+    "flux": "^3.1.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  }
+}

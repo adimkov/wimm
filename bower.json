@@ -1,0 +1,21 @@
+{
+  "name": "hofin",
+  "description": "Home finance project",
+  "main": "main.js",
+  "authors": [
+    "Anton Dimkov"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "4",
+    "font-awesome": "fontawesome#^4.7.0"
+  }
+}
