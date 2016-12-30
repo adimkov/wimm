@@ -7,8 +7,8 @@ export class ContainerState<TState> {
     }
 }
 
-export abstract class Container<TState> extends React.Component<void, ContainerState<TState>> {
-    constructor(props?: void, context?: any) {
+export abstract class Container<TProp, TState> extends React.Component<TProp, ContainerState<TState>> {
+    constructor(props?: TProp, context?: any) {
         super(props, context);
         this.state = new ContainerState(this.calculateState());
     }

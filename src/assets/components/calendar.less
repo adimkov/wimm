@@ -1,0 +1,59 @@
+@import 'var';
+
+@cellWidth: 14%;
+
+.calendar {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding: @ribbon-width @default-padding @default-padding @default-padding;
+    
+    table {
+        width: 100%;
+        height: 100%;
+        
+        th {
+            width: @cellWidth;
+            text-align: center;
+        }
+
+        td {
+            width: @cellWidth;
+            border: 1px solid black;
+            vertical-align: top;
+            color: black;
+            padding: @default-padding; 
+
+            p {
+                margin: .75rem 0 0 .75rem;
+            }
+
+            .cell-outer {
+                display: table;
+                height: 100%;
+                width: 100%;
+            }
+            
+            .cell-top {
+                display: table-row;
+                height: 1rem;
+            }
+            
+            .cell-container {
+                display: table-row;
+            }
+            
+            .cell-bottom {
+                display: table-row;
+                height: 1rem;
+                vertical-align: bottom;
+            }
+        }
+
+        .mute {
+            p {
+                color: gray;
+            }
+        }
+    }
+}

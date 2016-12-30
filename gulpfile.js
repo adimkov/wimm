@@ -26,9 +26,12 @@ gulp.task('copy-html', function() {
 
 gulp.task('src-assets-styles', function() {
     return gulp.src('./src/assets/**/*.less')
-    .pipe(less())
+    .pipe(less(
+        {
+            paths: [ path.join(__dirname, './src/assets/') ]
+        }
+    ))
     .pipe(concatCss('bundle.css'))
-    .pipe(gulp.src('./src/assets/**/*.png'))
     .pipe(gulp.dest('./dist/assets'));
 });
 

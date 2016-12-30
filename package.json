@@ -11,6 +11,7 @@
     "@types/flux": "0.0.33",
     "@types/immutable": "^3.8.4",
     "@types/node": "^6.0.46",
+    "@types/react-bootstrap": "0.0.37",
     "@types/react-dom": "^0.14.18",
     "@types/react-split-pane": "^0.1.4",
     "bower": "^1.7.9",
@@ -28,8 +29,10 @@
     "typescript": "^2.0.6"
   },
   "dependencies": {
+    "calendar": "^0.1.0",
     "flux": "^3.1.0",
     "react": "^15.3.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.3.2"
   }
 }

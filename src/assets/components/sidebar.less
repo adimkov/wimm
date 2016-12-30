@@ -1,0 +1,33 @@
+@import 'var';
+
+.sidebar {
+    height: 100%;
+    position: absolute;
+    right: 0;
+    padding-top: @ribbon-width;
+    z-index: 1;
+    transition: width 0.7s;
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    .window {
+        height: 100%;
+        background: @default-background;
+    }
+
+    .header {
+        background: @default-background;
+    }
+
+    .content {
+        background: @default-background;
+        
+    }
+
+    &.sidebar-open {
+        width: 55%;
+    }
+
+    &.sidebar-close {
+        width: 0;
+    }
+}
