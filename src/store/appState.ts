@@ -5,6 +5,7 @@ import { IpcReduceStore } from './ipcReduceStore';
 import Dispatcher from '../dispatcher';
 import {Action, Actions} from '../action/action';
 import * as CalendarModel from '../model/calendar'
+import { SidebarCommand } from '../model/sidebar';
 
 export type AppState = Map<string, any>;
 
@@ -22,6 +23,10 @@ class AppStore extends IpcReduceStore<AppState, Action<any>> {
                 return setRibbonCalendarSetYear(state, Number.parseInt(action.payload));
             case Actions.ribbonCalendarSetMonth:
                 return setRibbonCalendarSetMonth(state, Number.parseInt(action.payload));
+            case Actions.showAddSpending:
+                return openSidebar(state, new SidebarCommand('addSpending', action.payload));
+            case Actions.closeSidebar:
+                return closeSidebar(state);
         }
 
         return state;
@@ -53,6 +58,10 @@ class AppStore extends IpcReduceStore<AppState, Action<any>> {
         return options;
     }
 
+    getSidebarContent(): SidebarCommand<any> {
+        return this.getState().get('sidebar'); 
+    }
+
     registerIpcRenderer() {
     }
 }
@@ -67,6 +76,14 @@ function setRibbonCalendarSetYear(state: AppState, year: number) {
 
 function setRibbonCalendarSetMonth(state: AppState, month: number) {
     return state.set('ribbon.calendar.month', month);
+}
+
+function openSidebar(state: AppState, command: SidebarCommand<void>) {
+    return state.set('sidebar', command);
+}
+
+function closeSidebar(state: AppState) {
+    return state.remove('sidebar');
 }
 
 export let appStore = new AppStore(Dispatcher);

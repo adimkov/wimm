@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FormGroup, ControlLabel, FormControl, Form, Col} from 'react-bootstrap'
+import { FormGroup, ControlLabel, FormControl, Form, Col } from 'react-bootstrap'
 
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'

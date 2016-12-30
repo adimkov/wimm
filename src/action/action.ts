@@ -23,4 +23,12 @@ export class Actions {
     static ribbonCalendarSetMonth(month: CalendarModel.Months) {
         dispatcher.dispatch(new Action(Actions.ribbonCalendarSetMonth, month));
     }
+
+    static showAddSpending(date: Date) {
+        dispatcher.dispatch(new Action(Actions.showAddSpending, date));
+    }
+
+    static closeSidebar() {
+        dispatcher.dispatch(new Action(Actions.closeSidebar, null));
+    }
 }

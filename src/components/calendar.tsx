@@ -5,7 +5,7 @@ import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
 import { financeStore } from '../store/finance';
 import { appStore } from '../store/appState';
-
+import { Actions } from '../action/action';
 
 class CalendarProps {
     year: number;
@@ -72,11 +72,16 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         super(props, context);
     }
 
+    addSpending(e: React.SyntheticEvent<Element>) {
+        e.stopPropagation();
+        Actions.showAddSpending(this.props.date);
+    }
+
     render() {
         let cellClass = '';
         let isCurrentMonth = this.props.date.getMonth() !== this.props.targetMonth; 
         let addButton = (
-            <button type='button' className='btn btn-outline-primary btn-sm pull-right'>
+            <button type='button' className='btn btn-outline-primary btn-sm pull-right' onClick={this.addSpending.bind(this)}>
                 <i className='fa fa-plus' aria-hidden="true"></i>
             </button>);
 
