@@ -1,0 +1,37 @@
+@import 'var';
+
+.dropdown {
+    .selectedContainer > div {
+        display: inline-block;
+    }
+
+    .caret {
+        margin-top: 0.9rem;
+    }
+
+    .dropdownContainer {
+        visibility: hidden;
+        position: absolute;
+        width: 100%;
+        background-color: white;
+        z-index: @max-z-index;
+
+        padding-top: @default-padding;
+        border-left: 1px solid burlywood;
+        border-right: 1px solid burlywood;
+        border-bottom: 1px solid burlywood;
+        
+        &.open {
+            visibility: visible;
+        }
+
+        >div :hover{
+            background-color: #1e90ff;
+            color: white;
+        }
+
+        .option {
+            padding-left: 12px;
+        }
+    }
+}

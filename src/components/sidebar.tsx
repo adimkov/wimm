@@ -4,7 +4,7 @@ import { Container } from './container';
 import { financeStore } from '../store/finance';
 import { appStore } from '../store/appState';
 import { SidebarCommand } from '../model/sidebar';
-import { AddSpending } from './addSpending';
+import AddSpending from './addSpending';
 import { Actions } from '../action/action';
 
 class SidebarProp {

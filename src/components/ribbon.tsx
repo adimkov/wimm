@@ -86,7 +86,7 @@ class RibbonCalendarTab extends React.Component<RibbonCalendarTabProp, void> {
             <div className={tabClass}>
                 <form>
                     <div className='form-group row'>
-                        <label htmlFor="year" className="col-sm-2 col-form-label">Year</label>
+                        <label htmlFor="year" className="col-sm-2">Year</label>
                         <div className="col-sm-10">
                             <select id="year" className="form-control form-control-sm" value={this.props.state.year} onChange={this.yearChanged}>
                                 {yearOptions}
@@ -95,7 +95,7 @@ class RibbonCalendarTab extends React.Component<RibbonCalendarTabProp, void> {
                     </div>
                                     
                     <div className='form-group row'>
-                        <label htmlFor="month" className="col-sm-2 col-form-label">Month</label>
+                        <label htmlFor="month" className="col-sm-2">Month</label>
                         <div className="col-sm-10">
                             <select id="month" className="form-control form-control-sm" value={this.props.state.month} onChange={this.monthChanged}>
                                 {monthOptions}
