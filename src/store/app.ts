@@ -6,13 +6,17 @@ import Dispatcher from '../dispatcher';
 import {Action, Actions} from '../action/action';
 import * as CalendarModel from '../model/calendar'
 import { SidebarCommand } from '../model/sidebar';
+import * as FinanceModel from '../model/finance';
+
 
 export type AppState = Map<string, any>;
 
 
 class AppStore extends IpcReduceStore<AppState, Action<any>> {
     getInitialState() {
-        return Map<string, any>();
+        return Map<string, any>({
+            'categories': prepareCategories()
+        });
     }
      
     reduce(state: AppState, action: Action<any>) {
@@ -23,8 +27,10 @@ class AppStore extends IpcReduceStore<AppState, Action<any>> {
                 return setRibbonCalendarSetYear(state, Number.parseInt(action.payload));
             case Actions.ribbonCalendarSetMonth:
                 return setRibbonCalendarSetMonth(state, Number.parseInt(action.payload));
-            case Actions.showAddSpending:
+            case Actions.showNewSpendingDialog:
                 return openSidebar(state, new SidebarCommand('addSpending', action.payload));
+            case Actions.setNewSpending:
+                return setNewSpending(state, action.payload as FinanceModel.NewSpending);
             case Actions.closeSidebar:
                 return closeSidebar(state);
         }
@@ -62,8 +68,26 @@ class AppStore extends IpcReduceStore<AppState, Action<any>> {
         return this.getState().get('sidebar'); 
     }
 
+    getCategories(): List<FinanceModel.Category> {
+        return this.getState().get('categories');
+    }
+
+    getCurrentlyEditSpending() {
+        return this.getState().get('spending.edit') || new FinanceModel.NewSpending('food', 0, new Date());
+    }
+
     registerIpcRenderer() {
     }
+}
+
+function prepareCategories(): List<FinanceModel.Category> {
+    return List<FinanceModel.Category>([
+        new FinanceModel.Category('food', 'Food', 'green', 'fa-cutlery'),
+        new FinanceModel.Category('home', 'Home', 'blue', 'fa-home'),
+        new FinanceModel.Category('fun', 'Fun', 'yellow', 'fa-birthday-cake'),
+        new FinanceModel.Category('health', 'Health', 'red', 'fa-heartbeat'),
+        new FinanceModel.Category('other', 'Other', 'gray', 'fa-money'),
+    ]);
 }
 
 function setActiveRibbonTab(state: AppState, tabName: string) {
@@ -84,6 +108,10 @@ function openSidebar(state: AppState, command: SidebarCommand<void>) {
 
 function closeSidebar(state: AppState) {
     return state.remove('sidebar');
+}
+
+function setNewSpending(state: AppState, spending: FinanceModel.NewSpending) {
+    return state.set('spending.edit', spending);
 }
 
 export let appStore = new AppStore(Dispatcher);

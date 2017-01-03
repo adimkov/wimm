@@ -3,17 +3,19 @@ import { List } from 'immutable';
 
 import { Dropdown, DropdownOption } from './elements/dropdown';
 import { Container } from './container';
-import { financeStore } from '../store/finance';
-import { Category } from '../model/finance';
-
+import { appStore } from '../store/app';
+import { Category, NewSpending } from '../model/finance';
+import { Actions } from '../action/action';
 
 class AddSpendingProp {
     date: Date;
     categories: List<Category>;
+    currentEdit: NewSpending;
 }
 
 class AddSpendingContainerState {
     categories: List<Category>;
+    currentEdit: NewSpending;
 }
 
 class AddSpendingContainerParam {
@@ -23,6 +25,10 @@ class AddSpendingContainerParam {
 class AddSpending extends React.Component<AddSpendingProp, void> {
     constructor(props?: AddSpendingProp, context?: any) {
             super(props, context);
+    }
+
+    setCategory(category: string) {
+        Actions.setNewSpending(category, 0, this.props.date);
     }
 
     render() {
@@ -38,7 +44,7 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
                 <form>
                     <div className='form-group'>
                         <label htmlFor="year">Category</label>
-                        <Dropdown id='category' selectedValue='food'>
+                        <Dropdown id='category' selectedValue={this.props.currentEdit.category} onSelect={this.setCategory.bind(this)}>
                             {categories}
                         </Dropdown>
                     </div>
@@ -85,17 +91,19 @@ export default class AddSpendingContainer extends Container<AddSpendingContainer
     }
 
     getStores() {
-        return [financeStore];
+        return [appStore];
     }
 
     calculateState() {
         return {
-            categories: financeStore.getCategories()
+            categories: appStore.getCategories(),
+            currentEdit: appStore.getCurrentlyEditSpending()
+            
         }
     }
 
     render() {
-        return <AddSpending date={this.props.date} categories={this.state.value.categories}/>;
+        return <AddSpending date={this.props.date} categories={this.state.value.categories} currentEdit={this.state.value.currentEdit}/>;
     }
 }
 

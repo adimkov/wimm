@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { Container } from './container';
 import { financeStore } from '../store/finance';
-import { appStore } from '../store/appState';
+import { appStore } from '../store/app';
 import { SidebarCommand } from '../model/sidebar';
-import AddSpending from './addSpending';
+import AddSpending from './spending';
 import { Actions } from '../action/action';
 
 class SidebarProp {

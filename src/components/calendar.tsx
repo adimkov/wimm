@@ -4,7 +4,7 @@ import * as c from 'calendar'
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
 import { financeStore } from '../store/finance';
-import { appStore } from '../store/appState';
+import { appStore } from '../store/app';
 import { Actions } from '../action/action';
 
 class CalendarProps {
@@ -74,7 +74,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
 
     addSpending(e: React.SyntheticEvent<Element>) {
         e.stopPropagation();
-        Actions.showAddSpending(this.props.date);
+        Actions.showNewSpendingDialog(this.props.date);
     }
 
     render() {

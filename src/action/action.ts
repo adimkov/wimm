@@ -1,5 +1,6 @@
 import dispatcher from '../dispatcher';
 import * as CalendarModel from '../model/calendar';
+import * as Finance from '../model/finance';
 
 export class Action<TPayload> {
     constructor(type: any, payload: TPayload) {
@@ -24,11 +25,15 @@ export class Actions {
         dispatcher.dispatch(new Action(Actions.ribbonCalendarSetMonth, month));
     }
 
-    static showAddSpending(date: Date) {
-        dispatcher.dispatch(new Action(Actions.showAddSpending, date));
+    static showNewSpendingDialog(date: Date) {
+        dispatcher.dispatch(new Action(Actions.showNewSpendingDialog, date));
     }
 
     static closeSidebar() {
         dispatcher.dispatch(new Action(Actions.closeSidebar, null));
+    }
+
+    static setNewSpending(categoryCode: string, amount: number, date: Date) {
+        dispatcher.dispatch(new Action(Actions.setNewSpending, new Finance.NewSpending(categoryCode, amount, date)));
     }
 }

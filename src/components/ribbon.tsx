@@ -3,7 +3,7 @@ import { FormGroup, ControlLabel, FormControl, Form, Col } from 'react-bootstrap
 
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
-import { appStore } from '../store/appState';
+import { appStore } from '../store/app';
 import { Actions } from '../action/action';
 
 class RibbonProp {
