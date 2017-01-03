@@ -2,8 +2,8 @@ import * as React from 'react';
 import { List } from 'immutable';
 
 class DropdownProp {
-    selectedKey: string;
-    elementSelected: (key) => void
+    selectedValue: string;
+    onSelect: (value: string) => void
 }
 
 
@@ -13,7 +13,12 @@ class DropdownState {
 }
 
 class DropdownOptionProp {
-    key: string;
+    value: string;
+}
+
+interface INode {
+    parentElement: INode;
+    dataset: any;
 }
 
 export class Dropdown extends React.Component<DropdownProp, DropdownState> {
@@ -27,8 +32,24 @@ export class Dropdown extends React.Component<DropdownProp, DropdownState> {
         this.setState(this.state);
     }
 
+    selectOption(e: any) {
+        let target = e.target;
+        if (target !== undefined && target !== null) {
+            let node = getPayloadedElement(target, 10);
+            if (node !== undefined && node !== null) {
+                if (this.props.onSelect !== undefined && this.props.onSelect !== null) {
+                    this.props.onSelect(node.dataset.value);
+                }
+
+                this.openCloseDropdown();
+            }
+        }
+    }
+
     render() {
-        let selectedOption = (this.props.children as List<React.ReactElement<DropdownOptionProp>>).find(x => x.key === this.props.selectedKey);
+        let options = this.props.children as List<React.ReactHTMLElement<HTMLElement>>;
+        let selectedOption = options.find(x => x.props.value == this.props.selectedValue);
+        
         let dropdownContainerClasses = [];
         if (this.state.isOpen) {
             dropdownContainerClasses.push('open');
@@ -42,7 +63,7 @@ export class Dropdown extends React.Component<DropdownProp, DropdownState> {
                     </div>
                     <span className='caret pull-right'></span>
                 </div>
-                <div className={'dropdownContainer ' + dropdownContainerClasses.join()}>
+                <div className={'dropdownContainer ' + dropdownContainerClasses.join()} onClick={this.selectOption.bind(this)}>
                     {this.props.children}
                 </div>
             </div>
@@ -56,9 +77,22 @@ export class DropdownOption extends React.Component<DropdownOptionProp, void> {
     }
 
     render() {
-        return (<div>
-                    <div className='option'>{this.props.children}</div>
+        return (<div data-value={this.props.value}>
+                    <div className='option' >{this.props.children}</div>
                 </div>
             );
+    }
+}
+
+
+
+function getPayloadedElement(node: INode, level: number): INode {
+    if (node != undefined && node != null && level > 0) {
+        if (node.dataset != undefined && node.dataset.value != undefined) {
+            return node;
+        } 
+        else {
+            return getPayloadedElement(node.parentElement, level - 1);
+        }
     }
 }

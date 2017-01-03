@@ -27,7 +27,7 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
 
     render() {
         let categories = this.props.categories.map(x => 
-            <DropdownOption key={x.code}>
+            <DropdownOption key={x.code} value={x.code}>
                 <CategoryOption name={x.name} color={x.color}/>
             </DropdownOption>
         );
@@ -38,7 +38,7 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
                 <form>
                     <div className='form-group'>
                         <label htmlFor="year">Category</label>
-                        <Dropdown id='category' selectedKey='food'>
+                        <Dropdown id='category' selectedValue='food'>
                             {categories}
                         </Dropdown>
                     </div>

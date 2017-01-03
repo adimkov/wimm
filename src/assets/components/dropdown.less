@@ -1,8 +1,12 @@
 @import 'var';
 
 .dropdown {
-    .selectedContainer > div {
-        display: inline-block;
+    .selectedContainer { 
+        cursor: default;
+
+        &> div {
+            display: inline-block;
+        }
     }
 
     .caret {
@@ -25,13 +29,17 @@
             visibility: visible;
         }
 
+        >div{
+            cursor: default;
+        }
+
         >div :hover{
             background-color: #1e90ff;
             color: white;
         }
 
         .option {
-            padding-left: 12px;
+            padding: 3px 12px;
         }
     }
 }
