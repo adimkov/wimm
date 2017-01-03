@@ -22,7 +22,7 @@ function createWindow() {
      Menu.setApplicationMenu(Menu.buildFromTemplate(mainMenuTemplate));
      
      mainWindow.loadURL(`file://${__dirname}/index.html`);     
-     mainWindow.setTitle('HoFin home finance');
+     mainWindow.setTitle('CashSave home finance');
      mainWindow.maximize();
      mainWindow.webContents.openDevTools();
      
