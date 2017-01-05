@@ -3,6 +3,10 @@ import { List, Map, Record } from 'immutable';
 export class Spending extends Record({category: null, amount: 0}) {
     category: Category;
     amount: number;
+
+    constructor(category: Category, amount: number) {
+        super({category: category, amount: amount});
+    }
 }
 
 export class Category extends Record({code:'', name: '', color:'', icon:''}) {
@@ -16,12 +20,14 @@ export class Category extends Record({code:'', name: '', color:'', icon:''}) {
     }
 }
 
-export class NewSpending extends Record({category: '', amount: 0, date: Date}) {
-    public category: string;
-    public amount: number;
-    public date: Date;
+export interface CommitSpendingCommand {
+    category: Category;
+    amount: number;
+    date: Date;
+}
 
-    constructor(category: string, amount: number, date: Date) {
-        super({'category': category, 'amount': amount, 'date': date});
-    }
+export interface EditSpendingCommand {
+    category: string;
+    amount: number;
+    date: Date;
 }

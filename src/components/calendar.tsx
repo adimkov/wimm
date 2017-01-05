@@ -1,11 +1,13 @@
 import * as React from 'react';
 import * as c from 'calendar'
+import { List, Map, Record } from 'immutable';
 
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
 import { financeStore } from '../store/finance';
 import { appStore } from '../store/app';
 import { Actions } from '../action/action';
+import * as FinanceModel from '../model/finance';
 
 class CalendarProps {
     year: number;
@@ -74,7 +76,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
 
     addSpending(e: React.SyntheticEvent<Element>) {
         e.stopPropagation();
-        Actions.showNewSpendingDialog(this.props.date);
+        Actions.showEditSpendingDialog(this.props.date);
     }
 
     render() {
@@ -106,6 +108,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
 
 interface CalendarContainerState {
     ribbonCalendarState: RibbonCalendarState;
+    spendingForCurrentMonth: List<FinanceModel.Spending>
 } 
 
 export default class CalendarContainer extends Container<void, CalendarContainerState> {
@@ -118,8 +121,11 @@ export default class CalendarContainer extends Container<void, CalendarContainer
     }
 
     calculateState() {
+        let ribbonCalendarState = appStore.getRibbonCalendarOptions();
+        let spendingForCurrentMonth = financeStore.getSpendings(ribbonCalendarState.year, ribbonCalendarState.month);
         return {
-            ribbonCalendarState: appStore.getRibbonCalendarOptions()
+            ribbonCalendarState: ribbonCalendarState,
+            spendingForCurrentMonth: spendingForCurrentMonth
         }
     }
 

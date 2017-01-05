@@ -25,15 +25,23 @@ export class Actions {
         dispatcher.dispatch(new Action(Actions.ribbonCalendarSetMonth, month));
     }
 
-    static showNewSpendingDialog(date: Date) {
-        dispatcher.dispatch(new Action(Actions.showNewSpendingDialog, date));
+    static showEditSpendingDialog(date: Date) {
+        dispatcher.dispatch(new Action(Actions.showEditSpendingDialog, date));
     }
 
     static closeSidebar() {
         dispatcher.dispatch(new Action(Actions.closeSidebar, null));
     }
 
-    static setNewSpending(categoryCode: string, amount: number, date: Date) {
-        dispatcher.dispatch(new Action(Actions.setNewSpending, new Finance.NewSpending(categoryCode, amount, date)));
+    static setEditSpending(categoryCode: string, amount: number, date: Date) {
+        dispatcher.dispatch(new Action<Finance.EditSpendingCommand>(Actions.setEditSpending, {category: categoryCode, amount: amount, date: date}));
+    }
+
+    static cleanEditSpending() {
+        dispatcher.dispatch(new Action(Actions.cleanEditSpending, null));
+    }
+
+    static CommitSpending(category: Finance.Category, amount: number, date: Date) {
+        dispatcher.dispatch(new Action<Finance.CommitSpendingCommand>(Actions.CommitSpending, {category: category, amount: amount, date: date}));
     }
 }

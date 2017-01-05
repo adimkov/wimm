@@ -4,18 +4,18 @@ import { List } from 'immutable';
 import { Dropdown, DropdownOption } from './elements/dropdown';
 import { Container } from './container';
 import { appStore } from '../store/app';
-import { Category, NewSpending } from '../model/finance';
+import { Category, SpendingRow } from '../model/finance';
 import { Actions } from '../action/action';
 
 class AddSpendingProp {
     date: Date;
     categories: List<Category>;
-    currentEdit: NewSpending;
+    currentEdit: SpendingRow;
 }
 
 class AddSpendingContainerState {
     categories: List<Category>;
-    currentEdit: NewSpending;
+    currentEdit: SpendingRow;
 }
 
 class AddSpendingContainerParam {
@@ -28,7 +28,24 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
     }
 
     setCategory(category: string) {
-        Actions.setNewSpending(category, 0, this.props.date);
+        Actions.setEditSpending(category, this.props.currentEdit.amount, this.props.date);
+    }
+
+    updateAmount(e: React.SyntheticEvent<any>) {
+        Actions.setEditSpending(this.props.currentEdit.category.code, e.currentTarget.value, this.props.date);
+    }
+
+    closeSpending(e: React.SyntheticEvent<any>) {
+        Actions.cleanEditSpending();
+        Actions.closeSidebar();
+        e.preventDefault();
+    }
+
+    commitSpending(e: React.SyntheticEvent<any>) {
+        Actions.CommitSpending(this.props.currentEdit.category, this.props.currentEdit.amount, this.props.date)
+        Actions.cleanEditSpending();
+        Actions.closeSidebar();
+        e.preventDefault();
     }
 
     render() {
@@ -44,20 +61,20 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
                 <form>
                     <div className='form-group'>
                         <label htmlFor="year">Category</label>
-                        <Dropdown id='category' selectedValue={this.props.currentEdit.category} onSelect={this.setCategory.bind(this)}>
+                        <Dropdown id='category' selectedValue={this.props.currentEdit.category.code} onSelect={this.setCategory.bind(this)}>
                             {categories}
                         </Dropdown>
                     </div>
                     <div className='form-group'>
                         <label htmlFor="spending">Spending</label>
-                        <input id='spending' type='number' className='form-control'/>
+                        <input id='spending' type='number' value={this.props.currentEdit.amount} onChange={this.updateAmount.bind(this)} className='form-control'/>
                     </div>
                     <div className='btn-group btn-group-justified'>
                          <div className='btn-group'>
-                            <button className='btn btn-default'>Cancel</button>
+                            <button className='btn btn-default' onClick={this.closeSpending.bind(this)}>Cancel</button>
                          </div>
                          <div className='btn-group'>
-                            <button className='btn btn-primary'>Save</button>
+                            <button className='btn btn-primary' onClick={this.commitSpending.bind(this)}>Save</button>
                         </div>
                     </div>
                 </form>

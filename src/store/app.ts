@@ -27,10 +27,12 @@ class AppStore extends IpcReduceStore<AppState, Action<any>> {
                 return setRibbonCalendarSetYear(state, Number.parseInt(action.payload));
             case Actions.ribbonCalendarSetMonth:
                 return setRibbonCalendarSetMonth(state, Number.parseInt(action.payload));
-            case Actions.showNewSpendingDialog:
+            case Actions.showEditSpendingDialog:
                 return openSidebar(state, new SidebarCommand('addSpending', action.payload));
-            case Actions.setNewSpending:
-                return setNewSpending(state, action.payload as FinanceModel.NewSpending);
+            case Actions.setEditSpending:
+                return setNewSpending(state, action.payload as FinanceModel.EditSpendingCommand);
+            case Actions.cleanEditSpending:
+                return setNewSpending(state, null);
             case Actions.closeSidebar:
                 return closeSidebar(state);
         }
@@ -73,7 +75,7 @@ class AppStore extends IpcReduceStore<AppState, Action<any>> {
     }
 
     getCurrentlyEditSpending() {
-        return this.getState().get('spending.edit') || new FinanceModel.NewSpending('food', 0, new Date());
+        return this.getState().get('spending.edit') || new FinanceModel.Spending(this.getCategories().first(), 0);
     }
 
     registerIpcRenderer() {
@@ -110,8 +112,15 @@ function closeSidebar(state: AppState) {
     return state.remove('sidebar');
 }
 
-function setNewSpending(state: AppState, spending: FinanceModel.NewSpending) {
-    return state.set('spending.edit', spending);
+function setNewSpending(state: AppState, spending: FinanceModel.EditSpendingCommand) {
+    let spendingRow = null;
+
+    if (spending !== null) {
+        let category = prepareCategories().find(x => x.code === spending.category);
+        spendingRow = new FinanceModel.Spending(category, spending.amount)
+    }
+
+    return state.set('spending.edit', spendingRow);
 }
 
 export let appStore = new AppStore(Dispatcher);
