@@ -5,7 +5,7 @@ import { List, Map, Record } from 'immutable';
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
 import { financeStore } from '../store/finance';
-import { appStore } from '../store/app';
+import { ribbonStore } from '../store/ribbon';
 import { Actions } from '../action/action';
 import * as FinanceModel from '../model/finance';
 
@@ -117,11 +117,11 @@ export default class CalendarContainer extends Container<void, CalendarContainer
     }
 
     getStores() {
-        return [financeStore, appStore];
+        return [financeStore, ribbonStore];
     }
 
     calculateState() {
-        let ribbonCalendarState = appStore.getRibbonCalendarOptions();
+        let ribbonCalendarState = ribbonStore.getRibbonCalendarOptions();
         let spendingForCurrentMonth = financeStore.getSpendings(ribbonCalendarState.year, ribbonCalendarState.month);
         return {
             ribbonCalendarState: ribbonCalendarState,

@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import { Container } from './container';
-import { financeStore } from '../store/finance';
-import { appStore } from '../store/app';
+import { sidebarStore } from '../store/sidebar';
 import { SidebarCommand } from '../model/sidebar';
 import AddSpending from './spending';
 import { Actions } from '../action/action';
@@ -52,12 +51,12 @@ export default class SidebarContainer extends Container<void, SidebarContainerSt
     }
 
     getStores() {
-        return [appStore];
+        return [sidebarStore];
     }
 
     calculateState() {
         return {
-            sidebarContent: appStore.getSidebarContent()
+            sidebarContent: sidebarStore.getSidebarContent()
         }
     }
 

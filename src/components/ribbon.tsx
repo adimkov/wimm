@@ -3,7 +3,7 @@ import { FormGroup, ControlLabel, FormControl, Form, Col } from 'react-bootstrap
 
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
-import { appStore } from '../store/app';
+import { ribbonStore } from '../store/ribbon';
 import { Actions } from '../action/action';
 
 class RibbonProp {
@@ -137,13 +137,13 @@ export default class RibbonContainer extends Container<void, RibbonContainerStat
     }
 
     getStores() {
-        return [appStore];
+        return [ribbonStore];
     }
 
     calculateState() {
         return {
-            activeTab: appStore.getRibbonActiveTab(),
-            calendarState: appStore.getRibbonCalendarOptions()
+            activeTab: ribbonStore.getRibbonActiveTab(),
+            calendarState: ribbonStore.getRibbonCalendarOptions()
         }
     }
 

@@ -3,19 +3,19 @@ import { List } from 'immutable';
 
 import { Dropdown, DropdownOption } from './elements/dropdown';
 import { Container } from './container';
-import { appStore } from '../store/app';
-import { Category, SpendingRow } from '../model/finance';
+import { spendingStore } from '../store/spending';
+import { Category, Spending } from '../model/finance';
 import { Actions } from '../action/action';
 
 class AddSpendingProp {
     date: Date;
     categories: List<Category>;
-    currentEdit: SpendingRow;
+    currentEdit: Spending;
 }
 
 class AddSpendingContainerState {
     categories: List<Category>;
-    currentEdit: SpendingRow;
+    currentEdit: Spending;
 }
 
 class AddSpendingContainerParam {
@@ -108,13 +108,13 @@ export default class AddSpendingContainer extends Container<AddSpendingContainer
     }
 
     getStores() {
-        return [appStore];
+        return [spendingStore];
     }
 
     calculateState() {
         return {
-            categories: appStore.getCategories(),
-            currentEdit: appStore.getCurrentlyEditSpending()
+            categories: spendingStore.getCategories(),
+            currentEdit: spendingStore.getCurrentlyEditSpending()
             
         }
     }
