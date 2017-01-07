@@ -1,26 +1,44 @@
 import { ipcRenderer } from 'electron';
 import { List, Map, Record } from 'immutable';
+import * as c from 'calendar'
 
 import { IpcReduceStore } from './ipcReduceStore';
 import Dispatcher from '../dispatcher';
 import {Action, Actions} from '../action/action';
 import * as FinanceModel from '../model/finance';
 
-export type FinanceState = Map<string, List<FinanceModel.Spending>>;
+export type FinanceState = Map<Date, List<FinanceModel.Spending>>;
 
 class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
     getInitialState() {
-        return Map<string, List<FinanceModel.Spending>>();
+        return Map<Date, List<FinanceModel.Spending>>();
     }
      
-    getSpendings(year: number, month: number): List<FinanceModel.Spending> {
-        return this.getState().get(`${year}_${month}`);
+    getSpendings(year: number, month: number): Map<Date, List<FinanceModel.Spending>> {
+        return this.getState().takeWhile((val, key) => key.getFullYear() === year && key.getMonth() === month).toMap();
+    }
+
+    getSpendingsPerWeek(year: number, month: number): List<Map<Date, List<FinanceModel.Spending>>> {
+        var calendar = new c.Calendar(1);
+        var weeks = calendar.monthDates(year, month);
+        let weekSpendings = List<Map<Date, List<FinanceModel.Spending>>>().asMutable();
+        
+        for(let week of weeks) {
+            var daySpending = Map<Date, List<FinanceModel.Spending>>().asMutable();
+            for(let day of week) {
+                daySpending.set(day, this.getState().get(day) || List<FinanceModel.Spending>());
+            }
+
+            weekSpendings.push(daySpending.asImmutable());
+        }
+
+        return weekSpendings.asImmutable();
     }
 
     reduce(state: FinanceState, action: Action<any>) {
         switch(action.type) {
             case Actions.CommitSpending:
-            return commitSpending(state, action.payload as FinanceModel.CommitSpendingCommand);
+                return commitSpending(state, action.payload as FinanceModel.CommitSpendingCommand);
         }
         return state;
         
@@ -31,10 +49,10 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
 }
 
 function commitSpending(state: FinanceState, command: FinanceModel.CommitSpendingCommand) {
-    let dateString = `${command.date.getFullYear()}_${command.date.getMonth()}`;
-    let spendings = state.get(dateString) as List<FinanceModel.Spending> || List<FinanceModel.Spending>()
+    command.date.setHours(0, 0, 0, 0);
+    let spendings = state.get(command.date) as List<FinanceModel.Spending> || List<FinanceModel.Spending>()
     
-    return state.set(dateString, spendings.push(new FinanceModel.Spending(command.category, command.amount)));
+    return state.set(command.date, spendings.push(new FinanceModel.Spending(command.category, command.amount)));
 }
 
 export let financeStore = new FinanceStore(Dispatcher);

@@ -12,16 +12,7 @@ import * as FinanceModel from '../model/finance';
 class CalendarProps {
     year: number;
     month: Months;
-}
-
-class CalendarMonthCellProp {
-    date: Date;
-    targetMonth: Months;
-}
-
-class CalendarMonthWeekRowProps{
-    week: Array<Date>;
-    targetMonth: Months;
+    weeklySpending: List<Map<Date, List<FinanceModel.Spending>>>;
 }
 
 class Calendar extends React.Component<CalendarProps, void> {
@@ -33,7 +24,14 @@ class Calendar extends React.Component<CalendarProps, void> {
         let calendar = new c.Calendar(1);
         let weekDates = calendar.monthDates(this.props.year, this.props.month);
         
-        let calendarTable = weekDates.map((dates, index) => <CalendarMonthWeekRow key={index} week={dates} targetMonth={this.props.month}/>);
+        let calendarTable = weekDates.map((dates, index) => {
+            return <CalendarMonthWeekRow 
+                    key={index} 
+                    week={dates} 
+                    targetMonth={this.props.month}
+                    weekSpending={this.props.weeklySpending.get(index)}
+            />});
+        
         return (
         <div className='calendar'>
             <table>
@@ -56,17 +54,36 @@ class Calendar extends React.Component<CalendarProps, void> {
     }
 }
 
+class CalendarMonthWeekRowProps{
+    week: Array<Date>;
+    targetMonth: Months;
+    weekSpending: Map<Date, List<FinanceModel.Spending>>;
+
+}
+
 class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, void> {
     constructor(props?: CalendarMonthWeekRowProps, context?: any) {
         super(props, context);
     }
 
      render() {
-        var week = this.props.week.map((day, index) => <CalendarMonthCell key={index} date={day} targetMonth={this.props.targetMonth}/>)
+        var week = this.props.week.map((day, index) => 
+            <CalendarMonthCell 
+                key={index} 
+                date={day} 
+                targetMonth={this.props.targetMonth}
+                daySpending={this.props.weekSpending.get(day)} 
+            />)
         return (
             <tr>{ week }</tr>
         )
     }
+}
+
+class CalendarMonthCellProp {
+    date: Date;
+    targetMonth: Months;
+    daySpending: List<FinanceModel.Spending>;
 }
 
 class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
@@ -92,11 +109,21 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
             addButton = '';
         }
 
+        let spendings = this.props.daySpending.map((x, i) => 
+            <CalendarMonthCellSpendingRow 
+                key={`${this.props.date.getDate()}_${i}`}
+                category={x.category.name} 
+                color={x.category.color} 
+                icon={x.category.icon} 
+                amount={x.amount}/>)
+
         return (
             <td className={cellClass}>
                 <div className='cell-outer'>
                     <div className='cell-top'><p>{this.props.date.getDate()}</p></div>
-                    <div className='cell-container'></div>
+                    <div className='cell-container'>
+                        {spendings}
+                    </div>
                     <div className='cell-bottom'>
                         {addButton}
                     </div>
@@ -106,9 +133,29 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
     }
 }
 
+class CalendarMonthCellSpendingRowProp {
+    category: string;
+    color: string;
+    icon: string;
+    amount: number;
+} 
+
+class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, void> {
+    constructor(props?: CalendarMonthCellSpendingRowProp, context?: any) {
+        super(props, context);
+    }
+
+    render() {
+        return (
+            <div>
+                {this.props.category}:{this.props.amount}
+        </div>);
+    }
+}
+
 interface CalendarContainerState {
     ribbonCalendarState: RibbonCalendarState;
-    spendingForCurrentMonth: List<FinanceModel.Spending>
+    weeklySpending: List<Map<Date, List<FinanceModel.Spending>>>;
 } 
 
 export default class CalendarContainer extends Container<void, CalendarContainerState> {
@@ -122,14 +169,16 @@ export default class CalendarContainer extends Container<void, CalendarContainer
 
     calculateState() {
         let ribbonCalendarState = ribbonStore.getRibbonCalendarOptions();
-        let spendingForCurrentMonth = financeStore.getSpendings(ribbonCalendarState.year, ribbonCalendarState.month);
         return {
             ribbonCalendarState: ribbonCalendarState,
-            spendingForCurrentMonth: spendingForCurrentMonth
+            weeklySpending: financeStore.getSpendingsPerWeek(ribbonCalendarState.year, ribbonCalendarState.month)
         }
     }
 
     render() {
-        return <Calendar year={this.state.value.ribbonCalendarState.year} month={this.state.value.ribbonCalendarState.month}/>;
+        return <Calendar 
+            year={this.state.value.ribbonCalendarState.year} 
+            month={this.state.value.ribbonCalendarState.month}
+            weeklySpending={this.state.value.weeklySpending}/>;
     }
 }
