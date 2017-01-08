@@ -8,57 +8,74 @@ import { financeStore } from '../store/finance';
 import { ribbonStore } from '../store/ribbon';
 import { Actions } from '../action/action';
 import * as FinanceModel from '../model/finance';
+import ReactResizeDetector from 'react-resize-detector';
 
-class CalendarProps {
+interface CalendarProps {
     year: number;
     month: Months;
     weeklySpending: List<Map<Date, List<FinanceModel.Spending>>>;
 }
 
-class Calendar extends React.Component<CalendarProps, void> {
+interface CalendarState {
+    browserHeight: number;
+}
+
+class Calendar extends React.Component<CalendarProps, CalendarState> {
     constructor(props?: CalendarProps, context?: any) {
             super(props, context);
+            this.state = {browserHeight: 600};
     }
 
+    onResize(width: number, height: number) {
+        this.setState({browserHeight: height});
+    }
+    
     render() {
         let calendar = new c.Calendar(1);
         let weekDates = calendar.monthDates(this.props.year, this.props.month);
-        
+        const toolbar = 115;
+        const header = 20;
+        const bottomMargin = 6;
+        const border = 1;
+        const rowHeight = ((this.state.browserHeight - toolbar - header - bottomMargin) / weekDates.length) - border;
+
         let calendarTable = weekDates.map((dates, index) => {
             return <CalendarMonthWeekRow 
                     key={index} 
                     week={dates} 
                     targetMonth={this.props.month}
                     weekSpending={this.props.weeklySpending.get(index)}
+                    rowHeight = {rowHeight}
             />});
         
         return (
-        <div className='calendar'>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                        <th>Saturday</th>
-                        <th>Sunday</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { calendarTable }
-                </tbody>
-            </table>
-        </div>)
+                <div className='calendar'>
+                    <ReactResizeDetector handleHeight onResize={ this.onResize.bind(this) } />
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                                <th>Saturday</th>
+                                <th>Sunday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { calendarTable }
+                        </tbody>
+                    </table>
+                </div>)
     }
 }
 
-class CalendarMonthWeekRowProps{
+interface CalendarMonthWeekRowProps{
     week: Array<Date>;
     targetMonth: Months;
     weekSpending: Map<Date, List<FinanceModel.Spending>>;
-
+    rowHeight: number;
 }
 
 class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, void> {
@@ -73,6 +90,7 @@ class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, vo
                 date={day} 
                 targetMonth={this.props.targetMonth}
                 daySpending={this.props.weekSpending.get(day)} 
+                rowHeight={this.props.rowHeight}
             />)
         return (
             <tr>{ week }</tr>
@@ -80,10 +98,11 @@ class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, vo
     }
 }
 
-class CalendarMonthCellProp {
+interface CalendarMonthCellProp {
     date: Date;
     targetMonth: Months;
     daySpending: List<FinanceModel.Spending>;
+    rowHeight: number;
 }
 
 class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
@@ -95,8 +114,18 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         e.stopPropagation();
         Actions.showEditSpendingDialog(this.props.date);
     }
-
+    
     render() {
+        const header = 20;
+        const bottom = 30;
+        const headerPadding = 12 + 7 + 1;
+        const cellContainerStyle = {
+            height: this.props.rowHeight - header - bottom - headerPadding
+        }
+        const cellStyle = {
+            height: this.props.rowHeight
+        }
+        
         let cellClass = '';
         let isCurrentMonth = this.props.date.getMonth() !== this.props.targetMonth; 
         let addButton = (
@@ -118,15 +147,13 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
                 amount={x.amount}/>)
 
         return (
-            <td className={cellClass}>
-                <div className='cell-outer'>
-                    <div className='cell-top'><p>{this.props.date.getDate()}</p></div>
-                    <div className='cell-container'>
-                        {spendings}
-                    </div>
-                    <div className='cell-bottom'>
-                        {addButton}
-                    </div>
+            <td className={cellClass} style={cellStyle}>
+                <div className='cell-top'><p>{this.props.date.getDate()}</p></div>
+                <div id='container' className='cell-container' style={cellContainerStyle}>
+                    {spendings}
+                </div>
+                <div className='cell-bottom'>
+                    {addButton}
                 </div>
             </td>
         )

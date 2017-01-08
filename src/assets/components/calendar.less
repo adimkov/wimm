@@ -11,12 +11,12 @@
     table {
         width: 100%;
         height: 100%;
-        
+
         th {
             width: @cellWidth;
             text-align: center;
         }
-
+       
         td {
             width: @cellWidth;
             border: 1px solid black;
@@ -28,25 +28,17 @@
                 margin: .75rem 0 0 .75rem;
             }
 
-            .cell-outer {
-                display: table;
-                height: 100%;
-                width: 100%;
-            }
-            
+           
             .cell-top {
-                display: table-row;
-                height: 1rem;
+                height: 20px
             }
             
             .cell-container {
-                display: table-row;
+                overflow-x: auto;
             }
-            
+
             .cell-bottom {
-                display: table-row;
-                height: 1rem;
-                vertical-align: bottom;
+                height: 30px;
             }
         }
 
