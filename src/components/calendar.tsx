@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as c from 'calendar'
 import { List, Map, Record } from 'immutable';
+import * as TinyColor from 'tinycolor2';
 
 import { Container } from './container';
 import { Months, RibbonCalendarState } from '../model/calendar'
@@ -173,9 +174,19 @@ class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpen
     }
 
     render() {
+        let color = TinyColor(this.props.color);
+        const spendingStyle = {
+            backgroundColor: color.lighten(),
+            borderColor:  this.props.color
+        }
+        
+        const spendingColor = {
+            backgroundColor: this.props.color
+        }
+
         return (
-            <div>
-                {this.props.category}:{this.props.amount}
+        <div className='spending-row' style={spendingStyle}>
+            <div className='spending-tag' style={spendingColor}></div>{this.props.category}:{this.props.amount}
         </div>);
     }
 }

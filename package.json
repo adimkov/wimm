@@ -14,6 +14,7 @@
     "@types/react-bootstrap": "0.0.37",
     "@types/react-dom": "^0.14.18",
     "@types/react-split-pane": "^0.1.4",
+    "@types/tinycolor": "^1.1.27",
     "bower": "^1.7.9",
     "electron": "^1.4.5",
     "electron-packager": "^8.4.0",
@@ -34,6 +35,7 @@
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.3.2",
-    "react-resize-detector": "^0.3.3"
+    "react-resize-detector": "^0.3.3",
+    "tinycolor2": "^1.4.1"
   }
 }
