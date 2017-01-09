@@ -176,17 +176,16 @@ class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpen
     render() {
         let color = TinyColor(this.props.color);
         const spendingStyle = {
-            backgroundColor: color.lighten(),
-            borderColor:  this.props.color
+            borderLeftColor: color
         }
         
-        const spendingColor = {
-            backgroundColor: this.props.color
+        const spendingCategoryStyle = {
+            color: color
         }
 
         return (
         <div className='spending-row' style={spendingStyle}>
-            <div className='spending-tag' style={spendingColor}></div>{this.props.category}:{this.props.amount}
+            <span className='spending-header' style={spendingCategoryStyle}>{this.props.category}</span>{this.props.amount}
         </div>);
     }
 }

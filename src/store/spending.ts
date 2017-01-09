@@ -42,11 +42,12 @@ class SpendingStore extends IpcReduceStore<SpendingState, Action<any>> {
 
 function prepareCategories(): List<FinanceModel.Category> {
     return List<FinanceModel.Category>([
-        new FinanceModel.Category('food', 'Food', 'green', 'fa-cutlery'),
-        new FinanceModel.Category('home', 'Home', 'blue', 'fa-home'),
-        new FinanceModel.Category('fun', 'Fun', 'yellow', 'fa-birthday-cake'),
-        new FinanceModel.Category('health', 'Health', 'red', 'fa-heartbeat'),
-        new FinanceModel.Category('other', 'Other', 'gray', 'fa-money'),
+        new FinanceModel.Category('food', 'Food', '#80D651', 'fa-cutlery'),
+        new FinanceModel.Category('home', 'Home', '#45ABCD', 'fa-home'),
+        new FinanceModel.Category('fun', 'Fun', '#FEAF20', 'fa-birthday-cake'),
+        new FinanceModel.Category('health', 'Health', '#d73814', 'fa-heartbeat'),
+        new FinanceModel.Category('car', 'Car', '#47887E', 'fa-car'),
+        new FinanceModel.Category('other', 'Other', '#7f7f84', 'fa-money'),
     ]);
 }
 
