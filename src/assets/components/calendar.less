@@ -2,12 +2,9 @@
 
 @cellWidth: 14%;
 
-.calendar {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    padding: @ribbon-width @default-padding @default-padding @default-padding;
-    
+.calendar-container {
+
+   
     table {
         width: 100%;
         height: 100%;
@@ -16,49 +13,67 @@
             width: @cellWidth;
             text-align: center;
         }
-       
+        
         td {
             width: @cellWidth;
             border: 1px solid black;
             vertical-align: top;
             color: black;
             padding: @default-padding; 
+        }
+    }
 
-            p {
-                margin: .75rem 0 0 .75rem;
-            }
-
-           
-            .cell-top {
-                height: 20px
-            }
+    .calendar {
+        width: 80%;
+        height: 100%;
+        position: absolute;
+        padding: @ribbon-width @default-padding @default-padding @default-padding;
+        
+        table {
+            td {
+                p {
+                    margin: .75rem 0 0 .75rem;
+                }
             
-            .cell-container {
-                overflow-x: auto;
-                margin: 0 -@default-padding 0 -@default-padding
+                .cell-top {
+                    height: 20px
+                }
+                
+                .cell-container {
+                    overflow-x: auto;
+                    margin: 0 -@default-padding 0 -@default-padding
+                }
+
+                .cell-bottom {
+                    height: 30px;
+                }
+
+                .spending-row {
+                    background-color: #fafafa;
+                    border-left-width: @default-padding;
+                    border-left-style: solid;
+                    padding-left: @default-padding
+                }
+
+                .spending-header {
+                    //font-weight: bold;
+                    margin-right: @default-padding
+                }
             }
 
-            .cell-bottom {
-                height: 30px;
-            }
-
-            .spending-row {
-                background-color: #fafafa;
-                border-left-width: @default-padding;
-                border-left-style: solid;
-                padding-left: @default-padding
-            }
-
-            .spending-header {
-                //font-weight: bold;
-                margin-right: @default-padding
+            .mute {
+                p {
+                    color: gray;
+                }
             }
         }
+    }
 
-        .mute {
-            p {
-                color: gray;
-            }
-        }
+    .calendar-info {
+        width: 20%;
+        height: 100%;
+        position: absolute;
+        padding: @ribbon-width @default-padding @default-padding @default-padding;
+        right: 0
     }
 }

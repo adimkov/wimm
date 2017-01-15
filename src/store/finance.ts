@@ -35,6 +35,28 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
         return weekSpendings.asImmutable();
     }
 
+    getSpendingStatisticForCalendar(year: number, month: number): FinanceModel.CalendarMonthlyStatistic {
+        let spending = this.getSpendingsPerWeek(year, month);
+        let weekSpending = new Array();
+        let monthSpending = 0;
+        for (let weekData of spending.toArray()) {
+            let weekTotal = 0;
+            for (let day of weekData.toArray()) {
+                let dayTotal = 0;
+                day.forEach(x => dayTotal += Number.parseInt(x.amount.toString())); // in store all stored as a string
+                weekTotal += dayTotal;
+            }
+
+            weekSpending.push(weekTotal);
+            monthSpending += weekTotal;
+        }
+
+        return {
+            weekSpending: List(weekSpending),
+            monthSpending: monthSpending
+        };
+    }
+
     reduce(state: FinanceState, action: Action<any>) {
         switch(action.type) {
             case Actions.CommitSpending:

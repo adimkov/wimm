@@ -20,6 +20,11 @@ export class Category extends Record({code:'', name: '', color:'', icon:''}) {
     }
 }
 
+export interface CalendarMonthlyStatistic {
+    weekSpending: List<number>;
+    monthSpending: number;
+}
+
 export interface CommitSpendingCommand {
     category: Category;
     amount: number;

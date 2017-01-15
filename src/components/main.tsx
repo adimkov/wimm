@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import Calendar from './calendar';
+import CalendarInfo from './calendarinfo';
 import Ribbon from './ribbon';
 import Sidebar from './sidebar';
 import { Container } from './container';
@@ -16,7 +17,10 @@ export class Main extends React.Component<void, void> {
         return(
             <div>
                 <Ribbon />
-                <Calendar />
+                <div className='calendar-container'>
+                    <Calendar />
+                    <CalendarInfo /> 
+                </div>
                 <Sidebar />
             </div>
         );
