@@ -35,7 +35,6 @@
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.3.2",
-    "react-resize-detector": "^0.3.3",
-    "tinycolor2": "^1.4.1"
+    "react-resize-detector": "^0.3.3"
   }
 }
