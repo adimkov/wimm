@@ -8,6 +8,7 @@ import { financeStore } from '../store/finance';
 import { ribbonStore } from '../store/ribbon';
 import { Actions } from '../action/action';
 import * as FinanceModel from '../model/finance';
+import { formatDate } from '../services/date';
 import ReactResizeDetector from 'react-resize-detector';
 
 interface CalendarProps {
@@ -74,7 +75,7 @@ class Calendar extends React.Component<CalendarProps, CalendarState> {
 interface CalendarMonthWeekRowProps{
     week: Array<Date>;
     targetMonth: Months;
-    weekSpending: Map<Date, List<FinanceModel.Spending>>;
+    weekSpending: Map<string, List<FinanceModel.Spending>>;
     rowHeight: number;
 }
 
@@ -89,7 +90,7 @@ class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, vo
                 key={index} 
                 date={day} 
                 targetMonth={this.props.targetMonth}
-                daySpending={this.props.weekSpending.get(day)} 
+                daySpending={this.props.weekSpending.get(formatDate(day))} 
                 rowHeight={this.props.rowHeight}
             />)
         return (
@@ -190,7 +191,7 @@ class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpen
 
 interface CalendarContainerState {
     ribbonCalendarState: RibbonCalendarState;
-    weeklySpending: List<Map<Date, List<FinanceModel.Spending>>>;
+    weeklySpending: List<Map<string, List<FinanceModel.Spending>>>;
 } 
 
 export default class CalendarContainer extends Container<void, CalendarContainerState> {

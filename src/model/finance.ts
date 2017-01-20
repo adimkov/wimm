@@ -18,6 +18,10 @@ export class Category extends Record({code:'', name: '', color:'', icon:''}) {
     constructor(code: string, name: string, color: string, icon: string) {
         super({'code': code, 'name': name, 'color': color, 'icon': icon});
     }
+    
+    static fromMap(data: Map<string, string>): Category {
+        return new Category(data.get('code'), data.get('name'), data.get('color'), data.get('icon'))
+    }
 }
 
 export interface CalendarMonthlyStatistic {

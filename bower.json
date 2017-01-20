@@ -1,6 +1,6 @@
 {
-  "name": "cashsave",
-  "description": "Home finance project",
+  "name": "wimm",
+  "description": "Where is my money",
   "main": "main.js",
   "authors": [
     "Anton Dimkov"

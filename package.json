@@ -1,7 +1,7 @@
 {
-  "name": "cashsave",
+  "name": "wimm",
   "version": "1.0.0",
-  "description": "Home finance project",
+  "description": "Where is my money",
   "main": "main.js",
   "scripts": {},
   "author": "Anton Dimkov",
@@ -9,12 +9,10 @@
   "devDependencies": {
     "@types/electron": "^1.4.25",
     "@types/flux": "0.0.33",
-    "@types/immutable": "^3.8.4",
+    "@types/immutable": "^3.8.7",
     "@types/node": "^6.0.46",
     "@types/react-bootstrap": "0.0.37",
     "@types/react-dom": "^0.14.18",
-    "@types/react-split-pane": "^0.1.4",
-    "@types/tinycolor": "^1.1.27",
     "bower": "^1.7.9",
     "electron": "^1.4.5",
     "electron-packager": "^8.4.0",

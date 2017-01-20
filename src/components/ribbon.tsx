@@ -20,7 +20,7 @@ class RibbonCalendarTabProp implements IRibbonProp {
     isActive: boolean;
 }
 
-class RibbonReportTabProp implements IRibbonProp {
+class RibbonFileTabProp implements IRibbonProp {
     isActive: boolean;
 }
 
@@ -38,11 +38,11 @@ class Ribbon extends React.Component<RibbonProp, void> {
                 <div>
                     <ul className='ribbon-header'>
                         <li onClick={e => Actions.activateRibbonTab(RibbonCalendarTab.tabName)} className={activeTab[RibbonCalendarTab.tabName]}>{RibbonCalendarTab.tabName}</li>
-                        <li onClick={e => Actions.activateRibbonTab(RibbonReportTab.tabName)} className={activeTab[RibbonReportTab.tabName]}>{RibbonReportTab.tabName}</li>
+                        <li onClick={e => Actions.activateRibbonTab(RibbonFileTab.tabName)} className={activeTab[RibbonFileTab.tabName]}>{RibbonFileTab.tabName}</li>
                     </ul>
                     <div className='ribbon-container'>
                         <RibbonCalendarTab state={this.props.calendarProp} isActive={RibbonCalendarTab.tabName == this.props.activeTabName}/>
-                        <RibbonReportTab isActive={RibbonReportTab.tabName == this.props.activeTabName}/>
+                        <RibbonFileTab isActive={RibbonFileTab.tabName == this.props.activeTabName}/>
                     </div>
                 </div>
             </div>)
@@ -109,8 +109,8 @@ class RibbonCalendarTab extends React.Component<RibbonCalendarTabProp, void> {
     static tabName: string = 'calendar'
 }
 
-class RibbonReportTab extends React.Component<RibbonReportTabProp, void> {
-    constructor(props?: RibbonReportTabProp, context?: any) {
+class RibbonFileTab extends React.Component<RibbonFileTabProp, void> {
+    constructor(props?: RibbonFileTabProp, context?: any) {
             super(props, context);
     }
 
@@ -120,10 +120,13 @@ class RibbonReportTab extends React.Component<RibbonReportTabProp, void> {
             tabClass = 'show';
         }
         
-        return <div className={tabClass}>Report</div>
+        return (
+            <div className={tabClass}>
+                <button className='btn btn-default' onClick={e => Actions.flushFinanceStore()}>Save</button>
+            </div>)
     }
 
-    static tabName: string = 'report'
+    static tabName: string = 'file'
 }
 
 interface RibbonContainerState {

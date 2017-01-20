@@ -1,32 +1,54 @@
 import { ipcRenderer } from 'electron';
-import { List, Map, Record } from 'immutable';
-import * as c from 'calendar'
+import { List, Map, Record, Iterable, fromJS } from 'immutable';
+import * as c from 'calendar';
+import homedir from '../services/homedir'; 
+import { writeFileSync, readFileSync } from 'fs';
+import { join } from 'path';
 
 import { IpcReduceStore } from './ipcReduceStore';
 import Dispatcher from '../dispatcher';
 import {Action, Actions} from '../action/action';
 import * as FinanceModel from '../model/finance';
+import { formatDate, parseDateParts } from '../services/date';
 
-export type FinanceState = Map<Date, List<FinanceModel.Spending>>;
+export type FinanceState = Map<string, List<FinanceModel.Spending>>;
 
 class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
     getInitialState() {
-        return Map<Date, List<FinanceModel.Spending>>();
+        let stateJson = readStore();
+        if (stateJson == null) {
+            return Map<string, List<FinanceModel.Spending>>(); 
+        }
+
+        let state = fromJS(stateJson, (key, value) => {
+            if (value.get('amount') != undefined) {
+                let category = value.get('category');
+                return new FinanceModel.Spending(FinanceModel.Category.fromMap(value.get('category')), value.get('amount'));
+            }
+
+            return Iterable.isIndexed(value) ? value.toList(): value.toMap();
+
+        });
+
+        return state;
     }
      
-    getSpendings(year: number, month: number): Map<Date, List<FinanceModel.Spending>> {
-        return this.getState().takeWhile((val, key) => key.getFullYear() === year && key.getMonth() === month).toMap();
+    getSpendings(year: number, month: number): Map<string, List<FinanceModel.Spending>> {
+        return this.getState().takeWhile((val, key) => {
+            let date = parseDateParts(key);
+            return date.getFullYear() === year && date.getMonth() === month;
+        }).toMap();
     }
 
-    getSpendingsPerWeek(year: number, month: number): List<Map<Date, List<FinanceModel.Spending>>> {
+    getSpendingsPerWeek(year: number, month: number): List<Map<string, List<FinanceModel.Spending>>> {
         var calendar = new c.Calendar(1);
         var weeks = calendar.monthDates(year, month);
-        let weekSpendings = List<Map<Date, List<FinanceModel.Spending>>>().asMutable();
+        let weekSpendings = List<Map<string, List<FinanceModel.Spending>>>().asMutable();
         
         for(let week of weeks) {
-            var daySpending = Map<Date, List<FinanceModel.Spending>>().asMutable();
+            var daySpending = Map<string, List<FinanceModel.Spending>>().asMutable();
             for(let day of week) {
-                daySpending.set(day, this.getState().get(day) || List<FinanceModel.Spending>());
+                daySpending.set(formatDate(day), this.getState().get(formatDate(day)) || List<FinanceModel.Spending>());
             }
 
             weekSpendings.push(daySpending.asImmutable());
@@ -61,6 +83,8 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
         switch(action.type) {
             case Actions.CommitSpending:
                 return commitSpending(state, action.payload as FinanceModel.CommitSpendingCommand);
+            case Actions.flushFinanceStore:
+                return flushStore(state);
         }
         return state;
         
@@ -71,10 +95,28 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
 }
 
 function commitSpending(state: FinanceState, command: FinanceModel.CommitSpendingCommand) {
-    command.date.setHours(0, 0, 0, 0);
-    let spendings = state.get(command.date) as List<FinanceModel.Spending> || List<FinanceModel.Spending>()
+    let spendings = state.get(formatDate(command.date)) as List<FinanceModel.Spending> || List<FinanceModel.Spending>()
     
-    return state.set(command.date, spendings.push(new FinanceModel.Spending(command.category, command.amount)));
+    return state.set(formatDate(command.date), spendings.push(new FinanceModel.Spending(command.category, command.amount)));
+}
+
+function flushStore(state: FinanceState) {
+    writeFileSync(
+        join(homedir(), 'wimm_store.json'),
+        JSON.stringify(state.toJS()), 
+        {encoding: 'UTF-8'});
+    return state;
+}
+
+function readStore(): Array<any> {
+    let state = null;
+    try {
+        state = require(join(homedir(), 'wimm_store.json'));
+    }
+    catch(ex){
+    }
+
+    return state;
 }
 
 export let financeStore = new FinanceStore(Dispatcher);

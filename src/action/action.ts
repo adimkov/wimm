@@ -44,4 +44,8 @@ export class Actions {
     static CommitSpending(category: Finance.Category, amount: number, date: Date) {
         dispatcher.dispatch(new Action<Finance.CommitSpendingCommand>(Actions.CommitSpending, {category: category, amount: amount, date: date}));
     }
+    
+    static flushFinanceStore(){
+        dispatcher.dispatch(new Action(Actions.flushFinanceStore, null));
+    }
 }
