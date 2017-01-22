@@ -22,9 +22,11 @@ function createWindow() {
      Menu.setApplicationMenu(Menu.buildFromTemplate(mainMenuTemplate));
      
      mainWindow.loadURL(`file://${__dirname}/index.html`);     
-     mainWindow.setTitle('CashSave home finance');
+     mainWindow.setTitle('WIMM - Where Is My Money');
      mainWindow.maximize();
-     mainWindow.webContents.openDevTools();
+     if (process.argv.indexOf("console") >= 0) {
+        mainWindow.webContents.openDevTools();
+     }
      
      mainWindow.on('close', () => {
          mainWindow = null;

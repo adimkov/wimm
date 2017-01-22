@@ -13,7 +13,10 @@
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/dist/**/*.js"],
-            "preLaunchTask": "build"
+            "preLaunchTask": "build",
+            "args": [
+                "console"
+            ]
         }
     ]
 }

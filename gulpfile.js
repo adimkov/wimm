@@ -70,6 +70,19 @@ gulp.task('build-publish-win', function() {
         .pipe(exec.reporter());
 });
 
+gulp.task('build-publish-linux', function() {
+    return gulp.src('/')
+        .pipe(exec('electron-packager ./dist --out=./publish --platform=linux --asar --overwrite --icon=./dist/assets/logo.png'))
+        .pipe(exec.reporter());
+});
+
+
+gulp.task('build-publish-darwin', function() {
+    return gulp.src('/')
+        .pipe(exec('electron-packager ./dist --out=./publish --platform=darwin --asar --overwrite --icon=./dist/assets/logo.png'))
+        .pipe(exec.reporter());
+});
+
 gulp.task('build', ['script', 'copy-html', 'src-assets']);
 
 gulp.task('rebuild', ['script', 'copy-html', 'src-assets', 'copy-assets', 'copy-npm']);

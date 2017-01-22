@@ -15,16 +15,19 @@ nav.toolbar {
             float: left;
             height: @ribbon-width;
             display: table;
+            padding: @default-padding;
 
             a, form {
                 display: table-cell;
                 vertical-align: middle;    
             }
 
-            &.separator {
+            &:empty {
                 border-left: 1px black solid;
-                margin: @default-padding * 2;
-                height: @ribbon-width - @default-padding * 4
+                margin: @default-padding;
+                height: @ribbon-width - @default-padding * 2;
+                padding-right: 0;
+
             }
 
             form {

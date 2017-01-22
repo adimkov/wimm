@@ -44,7 +44,7 @@ class Toolbar extends React.Component<ToolbarProp, void> {
             <nav className='toolbar'>
                 <ul>
                     <li><a className='btn btn-default' onClick={e => Actions.flushFinanceStore()}>Save</a></li>
-                    <li className='separator'></li>
+                    <li></li>
                     <li>
                         <form className='form-inline'>
                             <div className='form-group'>
@@ -60,7 +60,7 @@ class Toolbar extends React.Component<ToolbarProp, void> {
                             </div>
                         </form>
                     </li>
-                    <li className='separator'></li>
+                    <li></li>
                 </ul>
             </nav>)
     }

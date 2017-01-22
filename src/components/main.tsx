@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import Calendar from './calendar';
 import CalendarInfo from './calendarinfo';
-import Ribbon from './ribbon';
 import Toolbar from './toolbar';
 import Sidebar from './sidebar';
 import { Container } from './container';
