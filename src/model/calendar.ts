@@ -13,7 +13,7 @@ export enum Months {
     December    = 11
 }
 
-export class RibbonCalendarState {
+export class SelectedDate {
     year: number;
     month: Months;
 }

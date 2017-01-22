@@ -1,0 +1,41 @@
+@import 'var';
+
+nav.toolbar {
+    width: 100%;
+    height: @ribbon-width;
+    background-color: @default-background;
+    position: absolute;
+    z-index: 1;
+
+    ul {
+        list-style: none;
+        padding-left: @default-padding;
+
+        li {
+            float: left;
+            height: @ribbon-width;
+            display: table;
+
+            a, form {
+                display: table-cell;
+                vertical-align: middle;    
+            }
+
+            &.separator {
+                border-left: 1px black solid;
+                margin: @default-padding * 2;
+                height: @ribbon-width - @default-padding * 4
+            }
+
+            form {
+                & .form-group {
+                    padding-right: @default-padding;
+                }
+
+                & .form-group:last-child {
+                    padding-right: 0 !important;
+                }
+            }
+        }
+    }
+}

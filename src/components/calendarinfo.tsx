@@ -2,9 +2,9 @@ import * as React from 'react';
 import { List, Map, Record } from 'immutable';
 
 import { Container } from './container';
-import { Months, RibbonCalendarState } from '../model/calendar'
+import { Months, SelectedDate } from '../model/calendar'
 import { financeStore } from '../store/finance';
-import { ribbonStore } from '../store/ribbon';
+import { toolbarStore } from '../store/toolbar';
 import { Actions } from '../action/action';
 import * as FinanceModel from '../model/finance';
 
@@ -74,7 +74,7 @@ class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, 
 }
 
 interface CalendarContainerState {
-    ribbonCalendarState: RibbonCalendarState;
+    ribbonCalendarState: SelectedDate;
     monthlySpendingStatistic: FinanceModel.CalendarMonthlyStatistic;
 }
 
@@ -84,11 +84,11 @@ export default class CalendarInfoContainer extends Container<void, CalendarConta
     }
 
     getStores() {
-        return [financeStore, ribbonStore];
+        return [financeStore, toolbarStore];
     }
 
     calculateState() {
-        let ribbonCalendarState = ribbonStore.getRibbonCalendarOptions();
+        let ribbonCalendarState = toolbarStore.getCalendarOptions();
         return {
             ribbonCalendarState: ribbonCalendarState,
             monthlySpendingStatistic: financeStore.getSpendingStatisticForCalendar(ribbonCalendarState.year, ribbonCalendarState.month)

@@ -3,9 +3,9 @@ import * as c from 'calendar'
 import { List, Map, Record } from 'immutable';
 
 import { Container } from './container';
-import { Months, RibbonCalendarState } from '../model/calendar'
+import { Months, SelectedDate } from '../model/calendar'
 import { financeStore } from '../store/finance';
-import { ribbonStore } from '../store/ribbon';
+import { toolbarStore } from '../store/toolbar';
 import { Actions } from '../action/action';
 import * as FinanceModel from '../model/finance';
 import { formatDate } from '../services/date';
@@ -190,7 +190,7 @@ class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpen
 }
 
 interface CalendarContainerState {
-    ribbonCalendarState: RibbonCalendarState;
+    ribbonCalendarState: SelectedDate;
     weeklySpending: List<Map<string, List<FinanceModel.Spending>>>;
 } 
 
@@ -200,11 +200,11 @@ export default class CalendarContainer extends Container<void, CalendarContainer
     }
 
     getStores() {
-        return [financeStore, ribbonStore];
+        return [financeStore, toolbarStore];
     }
 
     calculateState() {
-        let ribbonCalendarState = ribbonStore.getRibbonCalendarOptions();
+        let ribbonCalendarState = toolbarStore.getCalendarOptions();
         return {
             ribbonCalendarState: ribbonCalendarState,
             weeklySpending: financeStore.getSpendingsPerWeek(ribbonCalendarState.year, ribbonCalendarState.month)

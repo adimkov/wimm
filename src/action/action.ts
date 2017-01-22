@@ -17,12 +17,12 @@ export class Actions {
         dispatcher.dispatch(new Action(Actions.activateRibbonTab, name));
     }
 
-    static ribbonCalendarSetYear(year: number) {
-        dispatcher.dispatch(new Action(Actions.ribbonCalendarSetYear, year));
+    static setCalendarYear(year: number) {
+        dispatcher.dispatch(new Action(Actions.setCalendarYear, year));
     }
 
-    static ribbonCalendarSetMonth(month: CalendarModel.Months) {
-        dispatcher.dispatch(new Action(Actions.ribbonCalendarSetMonth, month));
+    static setCalendarMonth(month: CalendarModel.Months) {
+        dispatcher.dispatch(new Action(Actions.setCalendarMonth, month));
     }
 
     static showEditSpendingDialog(date: Date) {
