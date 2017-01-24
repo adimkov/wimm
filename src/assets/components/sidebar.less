@@ -27,10 +27,16 @@
     .window {
         height: 100%;
         background: @default-background;
+        padding: @default-padding;
+        border-top: @default-border;
+        border-left: @default-border;
     }
 
     .header {
         background: @default-background;
+        padding: @default-padding 0;
+        font-size: large;
+        border-bottom: @default-border;
     }
 
     .content {
@@ -39,7 +45,7 @@
     }
 
     &.sidebar-open {
-        width: 45%;
+        width: 450px;
     }
 
     &.sidebar-close {

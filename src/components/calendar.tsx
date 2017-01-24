@@ -24,7 +24,7 @@ interface CalendarState {
 class Calendar extends React.Component<CalendarProps, CalendarState> {
     constructor(props?: CalendarProps, context?: any) {
             super(props, context);
-            this.state = {browserHeight: 600};
+            this.state = {browserHeight: document.body.clientHeight};
     }
 
     onResize(width: number, height: number) {

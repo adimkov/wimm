@@ -65,7 +65,7 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
             let weekTotal = 0;
             for (let day of weekData.toArray()) {
                 let dayTotal = 0;
-                day.forEach(x => dayTotal += Number.parseInt(x.amount.toString())); // in store all stored as a string
+                day.forEach(x => dayTotal += Number.parseFloat(x.amount.toString())); // in store all stored as a string
                 weekTotal += dayTotal;
             }
 

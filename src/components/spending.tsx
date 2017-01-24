@@ -57,7 +57,7 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
 
         return (
             <div>
-                Add new spending for date: {this.props.date.toLocaleDateString()}
+                <p>Add new spending for date: {this.props.date.toLocaleDateString()}</p>
                 <form>
                     <div className='form-group'>
                         <label htmlFor="year">Category</label>
