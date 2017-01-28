@@ -87,4 +87,4 @@ gulp.task('build', ['script', 'copy-html', 'src-assets']);
 
 gulp.task('rebuild', ['script', 'copy-html', 'src-assets', 'copy-assets', 'copy-npm']);
 
-gulp.task('publish-win', gulpSequence('clean', 'rebuild', 'build-publish-win'));
+gulp.task('publish', gulpSequence('clean', 'rebuild', 'build-publish-win', 'build-publish-linux'));
