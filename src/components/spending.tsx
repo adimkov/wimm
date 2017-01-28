@@ -1,38 +1,40 @@
 import * as React from 'react';
 import { List } from 'immutable';
+const NumericInput = require('react-numeric-input'); //restriction of library. Can't import default as ES6 and TypeScript
 
 import { Dropdown, DropdownOption } from './elements/dropdown';
+import NumberKeypad from './numberkeypad';
 import { Container } from './container';
 import { spendingStore } from '../store/spending';
 import { Category, Spending } from '../model/finance';
 import { Actions } from '../action/action';
 
-class AddSpendingProp {
+interface AddSpendingProp {
     date: Date;
     categories: List<Category>;
     currentEdit: Spending;
 }
 
-class AddSpendingContainerState {
+interface AddSpendingContainerState {
     categories: List<Category>;
     currentEdit: Spending;
 }
 
-class AddSpendingContainerParam {
+interface AddSpendingContainerParam {
     date: Date;
 }
 
 class AddSpending extends React.Component<AddSpendingProp, void> {
     constructor(props?: AddSpendingProp, context?: any) {
             super(props, context);
-    }
+   }
 
     setCategory(category: string) {
         Actions.setEditSpending(category, this.props.currentEdit.amount, this.props.date);
     }
 
-    updateAmount(e: React.SyntheticEvent<any>) {
-        Actions.setEditSpending(this.props.currentEdit.category.code, e.currentTarget.value, this.props.date);
+    updateAmount(e: number) {
+        Actions.setEditSpending(this.props.currentEdit.category.code, e, this.props.date);
     }
 
     closeSpending(e: React.SyntheticEvent<any>) {
@@ -42,7 +44,7 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
     }
 
     commitSpending(e: React.SyntheticEvent<any>) {
-        Actions.CommitSpending(this.props.currentEdit.category, this.props.currentEdit.amount, this.props.date)
+        Actions.CommitSpending(this.props.currentEdit.category, Number.parseFloat(this.props.currentEdit.amount.toString()), this.props.date)
         Actions.cleanEditSpending();
         Actions.closeSidebar();
         e.preventDefault();
@@ -67,7 +69,10 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
                     </div>
                     <div className='form-group'>
                         <label htmlFor="spending">Spending</label>
-                        <input id='spending' type='number' value={this.props.currentEdit.amount} onChange={this.updateAmount.bind(this)} className='form-control'/>
+                        <NumericInput id='spending' value={this.props.currentEdit.amount} precision={2} min={0} step={0.1} onChange={this.updateAmount.bind(this)} className='form-control'/>
+                    </div>
+                    <div className='form-group'>
+                        <NumberKeypad/>
                     </div>
                     <div className='btn-group btn-group-justified'>
                          <div className='btn-group'>
@@ -114,13 +119,15 @@ export default class AddSpendingContainer extends Container<AddSpendingContainer
     calculateState() {
         return {
             categories: spendingStore.getCategories(),
-            currentEdit: spendingStore.getCurrentlyEditSpending()
-            
+            currentEdit: spendingStore.getCurrentlyEditSpending(),
         }
     }
 
     render() {
-        return <AddSpending date={this.props.date} categories={this.state.value.categories} currentEdit={this.state.value.currentEdit}/>;
+        return <AddSpending 
+            date={this.props.date} 
+            categories={this.state.value.categories} 
+            currentEdit={this.state.value.currentEdit} />;
     }
 }
 

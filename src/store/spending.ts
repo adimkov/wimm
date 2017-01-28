@@ -23,6 +23,10 @@ class SpendingStore extends IpcReduceStore<SpendingState, Action<any>> {
                 return setNewSpending(state, action.payload as FinanceModel.EditSpendingCommand);
             case Actions.cleanEditSpending:
                 return setNewSpending(state, null);
+            case Actions.spendingKeypadClick:
+                return setPressedNumberOnKeypad(state, action.payload as string, this.getCurrentlyEditSpending());
+            case Actions.spendingKeypadRelease:
+                return setPressedNumberOnKeypad(state, null, null);
         }
 
         return state;
@@ -32,8 +36,12 @@ class SpendingStore extends IpcReduceStore<SpendingState, Action<any>> {
         return this.getState().get('categories');
     }
 
-    getCurrentlyEditSpending() {
+    getCurrentlyEditSpending(): FinanceModel.Spending {
         return this.getState().get('spending.edit') || new FinanceModel.Spending(this.getCategories().first(), 0);
+    }
+
+    getPressedNumberOnKeypad(): string {
+        return this.getState().get('numberKeyPad.pressed');
     }
 
     registerIpcRenderer() {
@@ -60,6 +68,24 @@ function setNewSpending(state: SpendingState, spending: FinanceModel.EditSpendin
     }
 
     return state.set('spending.edit', spendingRow);
+}
+
+function setPressedNumberOnKeypad(state: SpendingState, symbol: string, currentEditItem: FinanceModel.Spending) {
+    let changedState = state;
+    if (currentEditItem != null) {
+        let amount = currentEditItem.amount; 
+        
+        if (amount == 0) {
+            amount = Number.parseInt(symbol);
+        } 
+        else { 
+            amount += symbol;
+        }
+
+        changedState = state.set('spending.edit', currentEditItem.setAmount(amount));
+    }
+    
+    return changedState.set('numberKeyPad.pressed', symbol);
 }
 
 export let spendingStore = new SpendingStore(Dispatcher);

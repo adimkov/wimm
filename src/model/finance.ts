@@ -2,10 +2,14 @@ import { List, Map, Record } from 'immutable';
 
 export class Spending extends Record({category: null, amount: 0}) {
     category: Category;
-    amount: number;
+    amount: number | string;
 
-    constructor(category: Category, amount: number) {
+    constructor(category: Category, amount: number | string) {
         super({category: category, amount: amount});
+    }
+
+    setAmount(amount: number | string) {
+        return new Spending(this.category, amount);
     }
 }
 
@@ -37,6 +41,6 @@ export interface CommitSpendingCommand {
 
 export interface EditSpendingCommand {
     category: string;
-    amount: number;
+    amount: number | string;
     date: Date;
 }

@@ -1,0 +1,22 @@
+@key-heigth: 80px;
+
+.numberKeypad {
+    width: 100%;
+
+    td {
+        width: 33%;
+        height: @key-heigth;
+        border: 1px solid;
+        text-align: center;
+        font-size: xx-large;
+        cursor: pointer;
+    } 
+
+    td:hover {
+        background-color: #f2f2f2;
+    }
+    
+    td.active {
+        background-color: #e8e8e8;
+    }
+}

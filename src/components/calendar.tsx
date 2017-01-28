@@ -184,7 +184,7 @@ class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpen
 
         return (
         <div className='spending-row' style={spendingStyle}>
-            <span className='spending-header' style={spendingCategoryStyle}>{this.props.category}</span>{this.props.amount}
+            <span className='spending-header' style={spendingCategoryStyle}>{this.props.category}</span>{Number.parseFloat(this.props.amount.toString()).toFixed(2)}
         </div>);
     }
 }

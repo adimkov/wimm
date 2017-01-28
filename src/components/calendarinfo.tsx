@@ -60,13 +60,13 @@ class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, 
     render() {
         let monthTotal = null;
         if (this.props.generateMonthCell) {
-            monthTotal = <td rowSpan={this.props.weeksCount} className='monthTotal'>{this.props.monthTotal}</td>
+            monthTotal = <td rowSpan={this.props.weeksCount} className='monthTotal'>{this.props.monthTotal.toFixed(2)}</td>
         }
         
 
         return (
             <tr>
-                <td className='weekTotal'>{this.props.weekTotal}</td>
+                <td className='weekTotal'>{this.props.weekTotal.toFixed(2)}</td>
                 {monthTotal}
             </tr>
             )

@@ -33,12 +33,20 @@ export class Actions {
         dispatcher.dispatch(new Action(Actions.closeSidebar, null));
     }
 
-    static setEditSpending(categoryCode: string, amount: number, date: Date) {
+    static setEditSpending(categoryCode: string, amount: number | string, date: Date) {
         dispatcher.dispatch(new Action<Finance.EditSpendingCommand>(Actions.setEditSpending, {category: categoryCode, amount: amount, date: date}));
     }
 
     static cleanEditSpending() {
         dispatcher.dispatch(new Action(Actions.cleanEditSpending, null));
+    }
+
+    static spendingKeypadClick(symbol: string) {
+        dispatcher.dispatch(new Action(Actions.spendingKeypadClick, symbol));
+    }
+    
+    static spendingKeypadRelease() {
+        dispatcher.dispatch(new Action(Actions.spendingKeypadRelease, null));
     }
 
     static CommitSpending(category: Finance.Category, amount: number, date: Date) {
