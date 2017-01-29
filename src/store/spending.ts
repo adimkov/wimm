@@ -55,6 +55,7 @@ function prepareCategories(): List<FinanceModel.Category> {
         new FinanceModel.Category('fun', 'Fun', '#FEAF20', 'fa-birthday-cake'),
         new FinanceModel.Category('health', 'Health', '#d73814', 'fa-heartbeat'),
         new FinanceModel.Category('car', 'Car', '#47887E', 'fa-car'),
+        new FinanceModel.Category('clothes', 'Clothes', '#9b59b6', 'fa-street-view'),
         new FinanceModel.Category('other', 'Other', '#7f7f84', 'fa-money'),
     ]);
 }

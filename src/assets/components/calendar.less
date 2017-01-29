@@ -46,6 +46,11 @@
 
                 .cell-bottom {
                     height: 30px;
+                    background: #fafafa;
+                    
+                    .day-total {
+                        display: inline-block;
+                    }
                 }
 
                 .spending-row {
@@ -56,12 +61,16 @@
                 }
 
                 .spending-header {
-                    //font-weight: bold;
                     margin-right: @default-padding
                 }
+
             }
 
             .mute {
+                .cell-bottom {
+                    background: none;
+                }
+                
                 p {
                     color: gray;
                 }

@@ -139,6 +139,15 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
             addButton = '';
         }
 
+        let sum = this.props.daySpending.reduce((x1, x2) => x1 + Number.parseFloat(x2.amount.toString()), 0);
+
+        let sumElt = null;
+
+        if (sum > 0) {
+             sumElt = <p className='day-total'>Σ {sum.toFixed(2)}</p>
+
+        } 
+
         let spendings = this.props.daySpending.map((x, i) => 
             <CalendarMonthCellSpendingRow 
                 key={`${this.props.date.getDate()}_${i}`}
@@ -154,6 +163,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
                     {spendings}
                 </div>
                 <div className='cell-bottom'>
+                    {sumElt}
                     {addButton}
                 </div>
             </td>
