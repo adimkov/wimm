@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, dialog } from 'electron';
+import { app, BrowserWindow, Menu, dialog, NativeImage } from 'electron';
 
 
 const mainMenuTemplate = [{
@@ -17,7 +17,7 @@ const mainMenuTemplate = [{
 let mainWindow: Electron.BrowserWindow;
 
 function createWindow() {
-     mainWindow = new BrowserWindow();
+     mainWindow = new BrowserWindow({icon: `${__dirname}/assets/logo.png`});
      
      Menu.setApplicationMenu(Menu.buildFromTemplate(mainMenuTemplate));
      

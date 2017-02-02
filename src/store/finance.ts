@@ -48,7 +48,12 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
         for(let week of weeks) {
             var daySpending = Map<string, List<FinanceModel.Spending>>().asMutable();
             for(let day of week) {
-                daySpending.set(formatDate(day), this.getState().get(formatDate(day)) || List<FinanceModel.Spending>());
+                if (day.getMonth() == month) {
+                    daySpending.set(formatDate(day), this.getState().get(formatDate(day)) || List<FinanceModel.Spending>());
+                }
+                else {
+                    daySpending.set(formatDate(day), List<FinanceModel.Spending>());
+                }
             }
 
             weekSpendings.push(daySpending.asImmutable());
