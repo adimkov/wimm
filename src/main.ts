@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, dialog, NativeImage } from 'electron';
+import { app, BrowserWindow, Menu, dialog } from 'electron';
 
 
 const mainMenuTemplate = [{

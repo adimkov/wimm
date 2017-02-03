@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { List, Map, Record, Iterable, fromJS } from 'immutable';
 import * as c from 'calendar';
-import homedir from '../services/homedir'; 
+import { homedir } from 'os'
 import { writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 

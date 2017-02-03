@@ -14,7 +14,7 @@ import ReactResizeDetector from 'react-resize-detector';
 interface CalendarProps {
     year: number;
     month: Months;
-    weeklySpending: List<Map<Date, List<FinanceModel.Spending>>>;
+    weeklySpending: List<Map<string, List<FinanceModel.Spending>>>;
 }
 
 interface CalendarState {
@@ -136,7 +136,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
 
         if (isCurrentMonth) {
             cellClass += 'mute';
-            addButton = '';
+            addButton = null;
         }
 
         let sum = this.props.daySpending.reduce((x1, x2) => x1 + Number.parseFloat(x2.amount.toString()), 0);
@@ -175,7 +175,7 @@ class CalendarMonthCellSpendingRowProp {
     category: string;
     color: string;
     icon: string;
-    amount: number;
+    amount: number | string;
 } 
 
 class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, void> {
