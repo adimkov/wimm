@@ -48,12 +48,7 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
         for(let week of weeks) {
             var daySpending = Map<string, List<FinanceModel.Spending>>().asMutable();
             for(let day of week) {
-                if (day.getMonth() == month) {
-                    daySpending.set(formatDate(day), this.getState().get(formatDate(day)) || List<FinanceModel.Spending>());
-                }
-                else {
-                    daySpending.set(formatDate(day), List<FinanceModel.Spending>());
-                }
+                daySpending.set(formatDate(day), this.getState().get(formatDate(day)) || List<FinanceModel.Spending>());
             }
 
             weekSpendings.push(daySpending.asImmutable());
@@ -64,23 +59,51 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
 
     getSpendingStatisticForCalendar(year: number, month: number): FinanceModel.CalendarMonthlyStatistic {
         let spending = this.getSpendingsPerWeek(year, month);
-        let weekSpending = new Array();
-        let monthSpending = 0;
+        let weeksSpending = new Array<List<FinanceModel.Spending>>();
+        let monthSpending = new Array<FinanceModel.Spending>();
+        let monthCategoriesMap: {[code: string]: FinanceModel.Spending} = {};
+
         for (let weekData of spending.toArray()) {
-            let weekTotal = 0;
-            for (let day of weekData.toArray()) {
-                let dayTotal = 0;
-                day.forEach(x => dayTotal += Number.parseFloat(x.amount.toString())); // in store all stored as a string
-                weekTotal += dayTotal;
+            let weekSpending = List<FinanceModel.Spending>().asMutable();
+            let categoriesMap: {[code: string]: FinanceModel.Spending} = {};
+          
+            for(let daySpendings of weekData.entrySeq().toArray()) {
+                
+                for (let spending of daySpendings[1] as Array<FinanceModel.Spending>) {
+                    if (categoriesMap[spending.category.code] === undefined) {
+                        categoriesMap[spending.category.code] = spending;
+                    } 
+                    else {
+                        categoriesMap[spending.category.code] = categoriesMap[spending.category.code]
+                            .setAmount(Number.parseFloat(categoriesMap[spending.category.code].amount.toString()) + Number.parseFloat(spending.amount.toString()));
+                    }
+
+                    if (parseDateParts(daySpendings[0]).getMonth() === month) {
+                        if (monthCategoriesMap[spending.category.code] === undefined) {
+                            monthCategoriesMap[spending.category.code] = spending;
+                        } 
+                        else {
+                            monthCategoriesMap[spending.category.code] = monthCategoriesMap[spending.category.code]
+                                .setAmount(Number.parseFloat(monthCategoriesMap[spending.category.code].amount.toString()) + Number.parseFloat(spending.amount.toString()));
+                        }
+                    }
+                }
             }
 
-            weekSpending.push(weekTotal);
-            monthSpending += weekTotal;
+            for (let spending in categoriesMap) {
+                weekSpending.push(categoriesMap[spending]);
+            }
+
+            weeksSpending.push(weekSpending);
+        }
+        
+        for (let spending in monthCategoriesMap) {
+                monthSpending.push(monthCategoriesMap[spending]);
         }
 
         return {
-            weekSpending: List(weekSpending),
-            monthSpending: monthSpending
+            weeksSpending: List(weeksSpending),
+            monthSpending: List(monthSpending)
         };
     }
 

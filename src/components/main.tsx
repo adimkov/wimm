@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Calendar from './calendar';
+import { CalendarContainer } from './calendar';
 import CalendarInfo from './calendarinfo';
 import Toolbar from './toolbar';
 import Sidebar from './sidebar';
@@ -18,7 +18,7 @@ export class Main extends React.Component<void, void> {
             <div>
                 <Toolbar />
                 <div className='calendar-container'>
-                    <Calendar />
+                    <CalendarContainer />
                     <CalendarInfo /> 
                 </div>
                 <Sidebar />

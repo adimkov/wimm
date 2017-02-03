@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { List, Map, Record } from 'immutable';
 
+import ReactResizeDetector from 'react-resize-detector';
 import { Container } from './container';
 import { Months, SelectedDate } from '../model/calendar'
 import { financeStore } from '../store/finance';
 import { toolbarStore } from '../store/toolbar';
 import { Actions } from '../action/action';
+import { CalendarMonthCellSpendingRow, CalendarMonthCellTotal } from './calendar';
 import * as FinanceModel from '../model/finance';
+import { calculateRowHeight } from '../services/calendarcalculator';
 
 interface CalendarInfoProps {
     year: number;
@@ -14,22 +17,33 @@ interface CalendarInfoProps {
     monthlySpendingStatistic: FinanceModel.CalendarMonthlyStatistic;
 }
 
-class CalendarInfo extends React.Component<CalendarInfoProps, void> {
+interface CalendarState {
+    browserHeight: number;
+}
+
+class CalendarInfo extends React.Component<CalendarInfoProps, CalendarState> {
     constructor(props?: CalendarInfoProps, context?: any) {
-            super(props, context);
+        super(props, context);
+        this.state = {browserHeight: document.body.clientHeight};
     }
     
+    onResize(width: number, height: number) {
+        this.setState({browserHeight: height});
+    }
+
     render() {
-        const statisticsRows = this.props.monthlySpendingStatistic.weekSpending.map((x, i) => 
+        const statisticsRows = this.props.monthlySpendingStatistic.weeksSpending.map((x, i) => 
             <CalendarWeekMonthInfo 
                 key={i}
                 generateMonthCell={i == 0}
-                weeksCount={this.props.monthlySpendingStatistic.weekSpending.count()}
+                weeksCount={this.props.monthlySpendingStatistic.weeksSpending.count()}
                 monthTotal={this.props.monthlySpendingStatistic.monthSpending}
-                weekTotal={x}/>);
+                weekTotal={x}
+                rowHeight={calculateRowHeight(this.state.browserHeight, this.props.monthlySpendingStatistic.weeksSpending.count())}/>);
 
         return (
             <div className='calendar-info'>
+                <ReactResizeDetector handleHeight onResize={ this.onResize.bind(this) } />
                 <table>
                     <thead>
                         <tr>
@@ -48,8 +62,9 @@ class CalendarInfo extends React.Component<CalendarInfoProps, void> {
 interface CalendarWeekMonthInfoProps {
     generateMonthCell: boolean;
     weeksCount: number;
-    monthTotal: number;
-    weekTotal: number;
+    monthTotal: List<FinanceModel.Spending>;
+    weekTotal: List<FinanceModel.Spending>;
+    rowHeight: number;
 }
 
 class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, void> {
@@ -60,13 +75,40 @@ class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, 
     render() {
         let monthTotal = null;
         if (this.props.generateMonthCell) {
-            monthTotal = <td rowSpan={this.props.weeksCount} className='monthTotal'>{this.props.monthTotal.toFixed(2)}</td>
+            let weekSpendingRows = this.props.monthTotal.map((x, i) => 
+                <CalendarMonthCellSpendingRow key={i} amount={x.amount} category={x.category.code} color={x.category.color} icon={x.category.icon} />
+            );
+
+            monthTotal = (
+                <td rowSpan={this.props.weeksCount} className='monthTotal'>
+                    {weekSpendingRows}
+                    <CalendarMonthCellTotal sum={this.props.monthTotal.reduce((p, n) => p + Number.parseFloat(n.amount.toString()), 0)}/>
+                </td>
+            )
+        }
+        
+        let weekSpendingRows = this.props.weekTotal.map((x, i) => 
+            <CalendarMonthCellSpendingRow key={i} amount={x.amount} category={x.category.code} color={x.category.color} icon={x.category.icon} />
+        );
+        
+        
+        let weekSpendingTotalElement = null;
+        if (this.props.weekTotal.count() > 0)
+        {
+            weekSpendingTotalElement = <CalendarMonthCellTotal sum={this.props.weekTotal.reduce((p, n) => p + Number.parseFloat(n.amount.toString()), 0)}/>
         }
         
 
+        const rowStyle = {
+            height: this.props.rowHeight
+        }
+
         return (
-            <tr>
-                <td className='weekTotal'>{this.props.weekTotal.toFixed(2)}</td>
+            <tr style={rowStyle}>
+                <td className='weekTotal'>
+                    {weekSpendingRows}
+                    {weekSpendingTotalElement}
+                </td>
                 {monthTotal}
             </tr>
             )

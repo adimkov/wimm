@@ -1,6 +1,9 @@
 @import 'var';
 
 @cellWidth: 14%;
+@cellContentBottomHeight: 23px;
+@cellContentBottomBackground: #fafafa;
+@cellContentBottomBorder: 1px solid;
 
 .calendar-container {
 
@@ -45,33 +48,23 @@
                 }
 
                 .cell-bottom {
-                    height: 23px;
-                    background: #fafafa;
-                    
-                    .day-total {
+                    height: @cellContentBottomHeight;
+                    background: @cellContentBottomBackground;
+
+                    .row-total {
                         display: inline-block;
-                        margin-top: 0;
-                        padding-top: 2px;
-                        padding-left: 4px;
+                        border: none;
                     }
                 }
-
-                .spending-row {
-                    background-color: #fafafa;
-                    border-left-width: @default-padding;
-                    border-left-style: solid;
-                    padding-left: @default-padding
-                }
-
-                .spending-header {
-                    margin-right: @default-padding
-                }
-
             }
 
             .mute {
                 .cell-bottom {
                     background: none;
+
+                    .row-total{
+                        display: block;
+                    }
                 }
                 
                 p {
@@ -81,11 +74,34 @@
         }
     }
 
+    .spending-header {
+        margin-right: @default-padding
+    }
+    
+    .spending-row {
+        background-color: #fafafa;
+        border-left-width: @default-padding;
+        border-left-style: solid;
+        padding-left: @default-padding
+    }
+
+    .row-total {
+        height: @cellContentBottomHeight;
+        background-color: @cellContentBottomBackground;
+        border-top: @cellContentBottomBorder;
+
+        p {
+            margin-top: 0 !important;
+            padding-top: 2px !important;
+            padding-left: 4px !important;
+        }
+    }
+
     .calendar-info {
         width: 20%;
         height: 100%;
         position: absolute;
         padding: @ribbon-width @default-padding @default-padding @default-padding;
-        right: 0
+        right: 0;
     }
 }

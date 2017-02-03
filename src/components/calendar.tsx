@@ -10,6 +10,7 @@ import { Actions } from '../action/action';
 import * as FinanceModel from '../model/finance';
 import { formatDate } from '../services/date';
 import ReactResizeDetector from 'react-resize-detector';
+import { calculateRowHeight, calculateCellContainerHeight } from '../services/calendarcalculator';
 
 interface CalendarProps {
     year: number;
@@ -34,11 +35,6 @@ class Calendar extends React.Component<CalendarProps, CalendarState> {
     render() {
         let calendar = new c.Calendar(1);
         let weekDates = calendar.monthDates(this.props.year, this.props.month);
-        const toolbar = 60;
-        const header = 20;
-        const bottomMargin = 6;
-        const border = 1;
-        const rowHeight = ((this.state.browserHeight - toolbar - header - bottomMargin) / weekDates.length) - border;
 
         let calendarTable = weekDates.map((dates, index) => {
             return <CalendarMonthWeekRow 
@@ -46,7 +42,7 @@ class Calendar extends React.Component<CalendarProps, CalendarState> {
                     week={dates} 
                     targetMonth={this.props.month}
                     weekSpending={this.props.weeklySpending.get(index)}
-                    rowHeight = {rowHeight}
+                    rowHeight = {calculateRowHeight(this.state.browserHeight, weekDates.length)}
             />});
         
         return (
@@ -117,12 +113,10 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
     }
     
     render() {
-        const header = 20;
-        const bottom = 23;
-        const headerPadding = 4 + 7 + 1;
         const cellContainerStyle = {
-            height: this.props.rowHeight - header - bottom - headerPadding
+            height: calculateCellContainerHeight(this.props.rowHeight)
         }
+
         const cellStyle = {
             height: this.props.rowHeight
         }
@@ -144,8 +138,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         let sumElt = null;
 
         if (sum > 0) {
-             sumElt = <p className='day-total'>Σ {sum.toFixed(2)}</p>
-
+             sumElt = <CalendarMonthCellTotal sum={sum}/>
         } 
 
         let spendings = this.props.daySpending.map((x, i) => 
@@ -178,7 +171,7 @@ class CalendarMonthCellSpendingRowProp {
     amount: number | string;
 } 
 
-class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, void> {
+export class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, void> {
     constructor(props?: CalendarMonthCellSpendingRowProp, context?: any) {
         super(props, context);
     }
@@ -204,7 +197,25 @@ interface CalendarContainerState {
     weeklySpending: List<Map<string, List<FinanceModel.Spending>>>;
 } 
 
-export default class CalendarContainer extends Container<void, CalendarContainerState> {
+interface CalendarMonthCellTotalProp {
+    sum: number;
+}
+
+export class CalendarMonthCellTotal extends React.Component<CalendarMonthCellTotalProp, void> {
+    constructor(props?: CalendarMonthCellTotalProp, context?: any) {
+        super(props, context);
+    }
+
+    render() {
+       return (
+            <div className='row-total'>
+                <p>Σ {this.props.sum.toFixed(2)}</p>
+            </div>
+       )
+    }
+}
+
+export class CalendarContainer extends Container<void, CalendarContainerState> {
     constructor(props?: void, context?: any) {
         super(props, context);
     }
