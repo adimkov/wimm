@@ -43,18 +43,18 @@ class Toolbar extends React.Component<ToolbarProp, void> {
         return (
             <nav className='toolbar'>
                 <ul>
-                    <li><a className='btn btn-default' onClick={e => Actions.flushFinanceStore()}>Save</a></li>
+                    <li><a className='btn btn-default btn-sm' onClick={e => Actions.flushFinanceStore()}>Save</a></li>
                     <li></li>
                     <li>
                         <form className='form-inline'>
                             <div className='form-group'>
-                                <select id="year" className="form-control form-control-sm" value={this.props.selectedYear} onChange={this.yearChanged}>
+                                <select id="year" className="form-control input-sm" value={this.props.selectedYear} onChange={this.yearChanged}>
                                     {yearOptions}
                                 </select>
                             </div>
                                         
                             <div className='form-group'>
-                                <select id="month" className="form-control form-control-sm" value={this.props.selectedMonth} onChange={this.monthChanged}>
+                                <select id="month" className="form-control input-sm" value={this.props.selectedMonth} onChange={this.monthChanged}>
                                     {monthOptions}
                                 </select>
                             </div>

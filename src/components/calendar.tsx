@@ -34,7 +34,7 @@ class Calendar extends React.Component<CalendarProps, CalendarState> {
     render() {
         let calendar = new c.Calendar(1);
         let weekDates = calendar.monthDates(this.props.year, this.props.month);
-        const toolbar = 115;
+        const toolbar = 60;
         const header = 20;
         const bottomMargin = 6;
         const border = 1;
@@ -118,8 +118,8 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
     
     render() {
         const header = 20;
-        const bottom = 30;
-        const headerPadding = 12 + 7 + 1;
+        const bottom = 23;
+        const headerPadding = 4 + 7 + 1;
         const cellContainerStyle = {
             height: this.props.rowHeight - header - bottom - headerPadding
         }
@@ -130,7 +130,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         let cellClass = '';
         let isCurrentMonth = this.props.date.getMonth() !== this.props.targetMonth; 
         let addButton = (
-            <button type='button' className='btn btn-outline-primary btn-sm pull-right' onClick={this.addSpending.bind(this)}>
+            <button type='button' className='btn btn-outline-primary btn-xs pull-right' onClick={this.addSpending.bind(this)}>
                 <i className='fa fa-plus' aria-hidden="true"></i>
             </button>);
 

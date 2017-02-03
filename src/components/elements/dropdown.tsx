@@ -3,6 +3,7 @@ import { List } from 'immutable';
 
 class DropdownProp {
     selectedValue: string;
+    className: string;
     onSelect: (value: string) => void
 }
 
@@ -28,8 +29,8 @@ export class Dropdown extends React.Component<DropdownProp, DropdownState> {
     }
 
     openCloseDropdown() {
-        this.state.isOpen = !this.state.isOpen; 
-        this.setState(this.state);
+        var isOpen = !this.state.isOpen; 
+        this.setState(new DropdownState(isOpen));
     }
 
     selectOption(e: any) {
@@ -57,7 +58,7 @@ export class Dropdown extends React.Component<DropdownProp, DropdownState> {
 
         return (
             <div className='dropdown'>
-                <div className='selectedContainer form-control' onClick={this.openCloseDropdown.bind(this)}>
+                <div className={'selectedContainer form-control ' + this.props.className} onClick={this.openCloseDropdown.bind(this)}>
                     <div>
                         {selectedOption}
                     </div>

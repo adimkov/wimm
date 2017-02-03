@@ -62,14 +62,14 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
                 <p>Add new spending for date: {this.props.date.toLocaleDateString()}</p>
                 <form>
                     <div className='form-group'>
-                        <label htmlFor="year">Category</label>
-                        <Dropdown id='category' selectedValue={this.props.currentEdit.category.code} onSelect={this.setCategory.bind(this)}>
+                        <label>Category</label>
+                        <Dropdown className='input-sm' selectedValue={this.props.currentEdit.category.code} onSelect={this.setCategory.bind(this)}>
                             {categories}
                         </Dropdown>
                     </div>
                     <div className='form-group'>
-                        <label htmlFor="spending">Spending</label>
-                        <NumericInput id='spending' value={this.props.currentEdit.amount} precision={2} min={0} step={0.1} onChange={this.updateAmount.bind(this)} className='form-control'/>
+                        <label>Spending</label>
+                        <NumericInput  value={this.props.currentEdit.amount} precision={2} min={0} step={0.1} onChange={this.updateAmount.bind(this)} className='form-control input-sm'/>
                     </div>
                     <div className='form-group'>
                         <NumberKeypad/>
