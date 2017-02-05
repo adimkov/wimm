@@ -81,13 +81,15 @@ class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, vo
     }
 
      render() {
-        var week = this.props.week.map((day, index) => 
+        const today = new Date();
+        const week = this.props.week.map((day, index) => 
             <CalendarMonthCell 
                 key={index} 
                 date={day} 
                 targetMonth={this.props.targetMonth}
                 daySpending={this.props.weekSpending.get(formatDate(day))} 
                 rowHeight={this.props.rowHeight}
+                isCurrentDate={day.getFullYear() == today.getFullYear() && day.getMonth() == today.getMonth() && day.getDate() == today.getDate()}
             />)
         return (
             <tr>{ week }</tr>
@@ -100,6 +102,7 @@ interface CalendarMonthCellProp {
     targetMonth: Months;
     daySpending: List<FinanceModel.Spending>;
     rowHeight: number;
+    isCurrentDate: boolean;
 }
 
 class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
@@ -120,7 +123,7 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         const cellStyle = {
             height: this.props.rowHeight
         }
-        
+
         let cellClass = '';
         let isCurrentMonth = this.props.date.getMonth() !== this.props.targetMonth; 
         let addButton = (
@@ -131,6 +134,10 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         if (isCurrentMonth) {
             cellClass += 'mute';
             addButton = null;
+        }
+
+        if (this.props.isCurrentDate) {
+            cellClass += 'today';
         }
 
         let sum = this.props.daySpending.reduce((x1, x2) => x1 + Number.parseFloat(x2.amount.toString()), 0);

@@ -76,7 +76,7 @@ class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, 
         let monthTotal = null;
         if (this.props.generateMonthCell) {
             let weekSpendingRows = this.props.monthTotal.map((x, i) => 
-                <CalendarMonthCellSpendingRow key={i} amount={x.amount} category={x.category.code} color={x.category.color} icon={x.category.icon} />
+                <CalendarMonthCellSpendingRow key={i} amount={x.amount} category={x.category.name} color={x.category.color} icon={x.category.icon} />
             );
 
             monthTotal = (
@@ -88,7 +88,7 @@ class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, 
         }
         
         let weekSpendingRows = this.props.weekTotal.map((x, i) => 
-            <CalendarMonthCellSpendingRow key={i} amount={x.amount} category={x.category.code} color={x.category.color} icon={x.category.icon} />
+            <CalendarMonthCellSpendingRow key={i} amount={x.amount} category={x.category.name} color={x.category.color} icon={x.category.icon} />
         );
         
         

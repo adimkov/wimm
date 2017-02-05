@@ -8,6 +8,9 @@ import { toolbarStore } from '../store/toolbar';
 class ToolbarProp {
     selectedYear: number;
     selectedMonth: Months;
+    calendarYears: Array<number>;
+    calendarPrevDisabled: boolean;
+    calendarNextDisabled: boolean;
 }
 
 class Toolbar extends React.Component<ToolbarProp, void> {
@@ -29,7 +32,7 @@ class Toolbar extends React.Component<ToolbarProp, void> {
         let monthOptions = [];
 
         var currentYear = new Date().getFullYear();
-        for (let i = 2016; i <= currentYear; i ++) {
+        for (let i of this.props.calendarYears) {
             yearOptions.push(<option key={i} value={i}>{i}</option>)
         }
 
@@ -40,6 +43,9 @@ class Toolbar extends React.Component<ToolbarProp, void> {
             }
         }
        
+        let calendarPrevMonthClass = this.props.calendarPrevDisabled ? 'disabled':'';
+        let calendarNextMonthClass = this.props.calendarNextDisabled ? 'disabled':'';
+
         return (
             <nav className='toolbar'>
                 <ul>
@@ -48,15 +54,20 @@ class Toolbar extends React.Component<ToolbarProp, void> {
                     <li>
                         <form className='form-inline'>
                             <div className='form-group'>
-                                <select id="year" className="form-control input-sm" value={this.props.selectedYear} onChange={this.yearChanged}>
+                                <a className={'btn btn-default btn-sm ' + calendarPrevMonthClass} onClick={e => Actions.setPrevMonth()}><i className="fa fa-arrow-left" aria-hidden="true"></i></a>
+                            </div>
+                            <div className='form-group form-group-sm'>
+                                <select id="year" className="form-control" value={this.props.selectedYear} onChange={this.yearChanged}>
                                     {yearOptions}
                                 </select>
                             </div>
-                                        
-                            <div className='form-group'>
-                                <select id="month" className="form-control input-sm" value={this.props.selectedMonth} onChange={this.monthChanged}>
+                            <div className='form-group form-group-sm'>
+                                <select id="month" className="form-control" value={this.props.selectedMonth} onChange={this.monthChanged}>
                                     {monthOptions}
                                 </select>
+                            </div>
+                            <div className='form-group'>
+                                <a className={'btn btn-default btn-sm ' + calendarNextMonthClass} onClick={e => Actions.setNextMonth()}><i className="fa fa-arrow-right" aria-hidden="true"></i></a>
                             </div>
                         </form>
                     </li>
@@ -68,6 +79,9 @@ class Toolbar extends React.Component<ToolbarProp, void> {
 
 class ToolbarContainerState {
     calendarState: SelectedDate;
+    calendarYears: Array<number>;
+    calendarPrevDisabled: boolean;
+    calendarNextDisabled: boolean;
 }
 
 export default class ToolbarContainer extends Container<void, ToolbarContainerState> {
@@ -81,13 +95,21 @@ export default class ToolbarContainer extends Container<void, ToolbarContainerSt
 
     calculateState() {
         return {
-            calendarState: toolbarStore.getCalendarOptions()
+            calendarState: toolbarStore.getCalendarOptions(),
+            calendarYears: toolbarStore.getYears(),
+            calendarPrevDisabled: toolbarStore.getIsPrevMonthDisabled(),
+            calendarNextDisabled: toolbarStore.getIsNextMonthDisabled()
         }
     }
 
     render() {
         return (
-                <Toolbar selectedYear={this.state.value.calendarState.year} selectedMonth={this.state.value.calendarState.month}/>
+                <Toolbar 
+                selectedYear={this.state.value.calendarState.year} 
+                selectedMonth={this.state.value.calendarState.month} 
+                calendarYears={this.state.value.calendarYears}
+                calendarPrevDisabled={this.state.value.calendarPrevDisabled}
+                calendarNextDisabled={this.state.value.calendarNextDisabled}/>
             );
     }
 }

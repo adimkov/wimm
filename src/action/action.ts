@@ -25,6 +25,14 @@ export class Actions {
         dispatcher.dispatch(new Action(Actions.setCalendarMonth, month));
     }
 
+    static setPrevMonth() {
+        dispatcher.dispatch(new Action(Actions.setPrevMonth, null));
+    }
+
+    static setNextMonth() {
+        dispatcher.dispatch(new Action(Actions.setNextMonth, null));
+    }
+
     static showEditSpendingDialog(date: Date) {
         dispatcher.dispatch(new Action(Actions.showEditSpendingDialog, date));
     }
