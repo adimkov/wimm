@@ -1,14 +1,22 @@
 import { app, BrowserWindow, Menu, dialog } from 'electron';
+import { financeStore } from './store/finance';
 
 
 const mainMenuTemplate = [{
     label: 'File',
     submenu: [
         {
-            label: 'Open Database',
-            accelerator: 'CMDOrCtrl+O',
+            label: 'Import Database',
+            accelerator: 'CMDOrCtrl+I',
             click(item, focusedWindow) {
-                openFolder(focusedWindow);
+                importDatabaseDialog(focusedWindow);
+            }
+        },
+        {
+            label: 'Export Database',
+            accelerator: 'CMDOrCtrl+E',
+            click(item, focusedWindow) {
+                exportDatabaseDialog(focusedWindow);
             }
         }
     ]
@@ -47,10 +55,23 @@ app.on('activate', () => {
     }
 });
 
-function openFolder(focusedWindow: Electron.BrowserWindow) {
+function importDatabaseDialog(focusedWindow: Electron.BrowserWindow) {
     dialog.showOpenDialog(focusedWindow, { properties: ['openFile'] }, folder => {
         if (folder !== undefined && folder.length > 0) {
             //focusedWindow.webContents.send('open-folder-result', folder);
         }
     });
+}
+
+function exportDatabaseDialog(focusedWindow: Electron.BrowserWindow) {
+    let date = new Date();
+    dialog.showSaveDialog(focusedWindow, {
+        title: 'Export database', 
+        defaultPath: `wimmDB_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}.zip`,
+        filters: [
+            { name: 'ZIP archive', extensions: ['zip'] }
+        ]}, 
+        fileName => {
+            focusedWindow.webContents.send('db-export', fileName);
+        });
 }

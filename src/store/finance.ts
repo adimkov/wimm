@@ -2,8 +2,9 @@ import { ipcRenderer } from 'electron';
 import { List, Map, Record, Iterable, fromJS } from 'immutable';
 import * as c from 'calendar';
 import { homedir } from 'os'
-import { writeFileSync, readFileSync } from 'fs';
+import { writeFileSync, readFileSync, createWriteStream } from 'fs';
 import { join } from 'path';
+import * as archiver from 'archiver';
 
 import { IpcReduceStore } from './ipcReduceStore';
 import Dispatcher from '../dispatcher';
@@ -12,6 +13,8 @@ import * as FinanceModel from '../model/finance';
 import { formatDate, parseDateParts } from '../services/date';
 
 export type FinanceState = Map<string, List<FinanceModel.Spending>>;
+
+const dbFileName = 'wimm_store.json';
 
 class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
     getInitialState() {
@@ -107,6 +110,16 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
         };
     }
 
+    exportDatabase(path: string) {
+        var zipStream = createWriteStream(path);
+        let zip = archiver.create('zip');
+        zip.pipe(zipStream);
+
+        zip.append(readFileSync(join(homedir(), dbFileName)), {name: dbFileName});
+
+        zip.finalize();
+    }
+
     reduce(state: FinanceState, action: Action<any>) {
         switch(action.type) {
             case Actions.CommitSpending:
@@ -119,6 +132,9 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
     }
 
     registerIpcRenderer() {
+        ipcRenderer.on('db-export', (event, fileName) => {
+            financeStore.exportDatabase(fileName);
+        });
     }
 }
 
@@ -130,7 +146,7 @@ function commitSpending(state: FinanceState, command: FinanceModel.CommitSpendin
 
 function flushStore(state: FinanceState) {
     writeFileSync(
-        join(homedir(), 'wimm_store.json'),
+        join(homedir(), dbFileName),
         JSON.stringify(state.toJS()), 
         {encoding: 'UTF-8'});
     return state;
@@ -139,7 +155,7 @@ function flushStore(state: FinanceState) {
 function readStore(): Array<any> {
     let state = null;
     try {
-        state = require(join(homedir(), 'wimm_store.json'));
+        state = require(join(homedir(), dbFileName));
     }
     catch(ex){
     }
