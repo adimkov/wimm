@@ -2,9 +2,9 @@ import { ipcRenderer } from 'electron';
 import { List, Map, Record, Iterable, fromJS } from 'immutable';
 import * as c from 'calendar';
 import { homedir } from 'os'
-import { writeFileSync, readFileSync, createWriteStream } from 'fs';
+import { writeFileSync, readFileSync, createWriteStream, createReadStream } from 'fs';
 import { join } from 'path';
-import * as archiver from 'archiver';
+import * as zlip from 'zlib';
 
 import { IpcReduceStore } from './ipcReduceStore';
 import Dispatcher from '../dispatcher';
@@ -19,21 +19,7 @@ const dbFileName = 'wimm_store.json';
 class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
     getInitialState() {
         let stateJson = readStore();
-        if (stateJson == null) {
-            return Map<string, List<FinanceModel.Spending>>(); 
-        }
-
-        let state = fromJS(stateJson, (key, value) => {
-            if (value.get('amount') != undefined) {
-                let category = value.get('category');
-                return new FinanceModel.Spending(FinanceModel.Category.fromMap(value.get('category')), value.get('amount'));
-            }
-
-            return Iterable.isIndexed(value) ? value.toList(): value.toMap();
-
-        });
-
-        return state;
+        return prepareState(stateJson);
     }
      
     getSpendings(year: number, month: number): Map<string, List<FinanceModel.Spending>> {
@@ -110,30 +96,26 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
         };
     }
 
-    exportDatabase(path: string) {
-        var zipStream = createWriteStream(path);
-        let zip = archiver.create('zip');
-        zip.pipe(zipStream);
-
-        zip.append(readFileSync(join(homedir(), dbFileName)), {name: dbFileName});
-
-        zip.finalize();
-    }
-
     reduce(state: FinanceState, action: Action<any>) {
         switch(action.type) {
             case Actions.CommitSpending:
                 return commitSpending(state, action.payload as FinanceModel.CommitSpendingCommand);
             case Actions.flushFinanceStore:
                 return flushStore(state);
+            case "importState":
+                return flushStore(action.payload as FinanceState);
         }
+
         return state;
-        
     }
 
     registerIpcRenderer() {
         ipcRenderer.on('db-export', (event, fileName) => {
-            financeStore.exportDatabase(fileName);
+            exportDatabase(fileName);
+        });
+
+        ipcRenderer.on('db-import', (event, fineName) => {
+            this.getDispatcher().dispatch(new Action("importState", importDatabase(fineName)));
         });
     }
 }
@@ -161,6 +143,35 @@ function readStore(): Array<any> {
     }
 
     return state;
+}
+
+function prepareState(stateJson):FinanceState {
+    if (stateJson == null) {
+        return Map<string, List<FinanceModel.Spending>>(); 
+    }
+
+    let state = fromJS(stateJson, (key, value) => {
+        if (value.get('amount') != undefined) {
+            let category = value.get('category');
+            return new FinanceModel.Spending(FinanceModel.Category.fromMap(value.get('category')), value.get('amount'));
+        }
+
+        return Iterable.isIndexed(value) ? value.toList(): value.toMap();
+
+    });
+
+    return state;
+}
+
+function exportDatabase(path: string) {
+    let zip = zlip.createGzip();
+    var zipStream = createWriteStream(path);
+    createReadStream(join(homedir(), dbFileName)).pipe(zip).pipe(createWriteStream(path));
+}
+
+function importDatabase(path: string) {
+    let file = zlip.unzipSync(readFileSync(path)).toString('utf-8');
+    return prepareState(JSON.parse(file));
 }
 
 export let financeStore = new FinanceStore(Dispatcher);

@@ -56,9 +56,15 @@ app.on('activate', () => {
 });
 
 function importDatabaseDialog(focusedWindow: Electron.BrowserWindow) {
-    dialog.showOpenDialog(focusedWindow, { properties: ['openFile'] }, folder => {
-        if (folder !== undefined && folder.length > 0) {
-            //focusedWindow.webContents.send('open-folder-result', folder);
+    dialog.showOpenDialog(focusedWindow, {
+        title: 'Import database',
+        filters: [
+            { name: 'GZIP archive', extensions: ['gz'] }
+        ], 
+        properties: ['openFile'] }, 
+        file => {
+        if (file !== undefined && file.length > 0) {
+            focusedWindow.webContents.send('db-import', file[0]);
         }
     });
 }
@@ -67,11 +73,13 @@ function exportDatabaseDialog(focusedWindow: Electron.BrowserWindow) {
     let date = new Date();
     dialog.showSaveDialog(focusedWindow, {
         title: 'Export database', 
-        defaultPath: `wimmDB_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}.zip`,
+        defaultPath: `wimmDB_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}.gz`,
         filters: [
-            { name: 'ZIP archive', extensions: ['zip'] }
+            { name: 'GZIP archive', extensions: ['gz'] }
         ]}, 
         fileName => {
-            focusedWindow.webContents.send('db-export', fileName);
+            if (fileName != undefined) {
+                focusedWindow.webContents.send('db-export', fileName);
+            }
         });
 }
