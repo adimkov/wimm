@@ -44,7 +44,7 @@ gulp.task('src-assets', ['src-assets-styles', 'src-assets-img'])
 
 gulp.task('copy-assets', function() {
     return gulp.src([
-        './bower_components/**/+(dist|font-awesome)/**/*.+(min.css|min.js|otf|eot|svg|ttf|woff|woff2)'])
+        './bower_components/**/*.+(min.css|otf|eot|svg|ttf|woff|woff2)'])
     .pipe(gulp.dest('./dist/assets'));
 });
 
