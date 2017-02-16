@@ -3,7 +3,7 @@ import { List } from 'immutable';
 const NumericInput = require('react-numeric-input'); //restriction of library. Can't import default as ES6 and TypeScript
 
 import { Dropdown, DropdownOption } from './elements/dropdown';
-import NumberKeypad from './numberkeypad';
+import NumberKeypad from './number-keypad';
 import { Container } from './container';
 import { spendingStore } from '../store/spending';
 import { Category, Spending } from '../model/finance';

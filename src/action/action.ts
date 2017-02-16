@@ -64,4 +64,12 @@ export class Actions {
     static flushFinanceStore(){
         dispatcher.dispatch(new Action(Actions.flushFinanceStore, null));
     }
+
+    static showViewMonthCalendar(){
+        dispatcher.dispatch(new Action(Actions.showViewMonthCalendar, null));
+    }
+
+    static showViewReportCalendar(){
+        dispatcher.dispatch(new Action(Actions.showViewReportCalendar, null));
+    }
 }

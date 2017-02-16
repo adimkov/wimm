@@ -26,6 +26,10 @@ class ToolbarStore extends IpcReduceStore<ToolbarState, Action<any>> {
                 return setCalendarPrevMonth(state, this.getCalendarOptions());
             case Actions.setNextMonth:
                 return setCalendarNextMonth(state, this.getCalendarOptions());
+            case Actions.showViewMonthCalendar:
+                return setActiveView(state, 'calendar-month');
+            case Actions.showViewReportCalendar:
+                return setActiveView(state, 'calendar-report');
         }
 
         return state;
@@ -67,6 +71,10 @@ class ToolbarStore extends IpcReduceStore<ToolbarState, Action<any>> {
         return calendarOptions.year == currentDate.getFullYear() && calendarOptions.month == currentDate.getMonth();
     }
 
+    getActiveViewName(){
+        return this.getState().get('active-view') || 'calendar-month';
+    }
+
     registerIpcRenderer() {
     }
 }
@@ -105,6 +113,10 @@ function setCalendarNextMonth(state: ToolbarState, selectedDate: CalendarModel.S
     }
 
     return state;
+}
+
+function setActiveView(state: ToolbarState, view: string) {
+    return state.set('active-view', view);
 }
 
 export let toolbarStore = new ToolbarStore(Dispatcher);

@@ -25,7 +25,7 @@
     "gulp-sourcemaps": "^2.4.0",
     "gulp-typescript": "^3.1.4",
     "npm-check-updates": "^2.8.10",
-    "typescript": "^2.1.5"
+    "typescript": "^2.1.6"
   },
   "dependencies": {
     "calendar": "^0.1.0",

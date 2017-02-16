@@ -4,6 +4,7 @@ import { Container } from './container';
 import { Actions } from '../action/action';
 import { Months, SelectedDate } from '../model/calendar';
 import { toolbarStore } from '../store/toolbar';
+import { Hash } from '../model/collection';
 
 class ToolbarProp {
     selectedYear: number;
@@ -11,6 +12,7 @@ class ToolbarProp {
     calendarYears: Array<number>;
     calendarPrevDisabled: boolean;
     calendarNextDisabled: boolean;
+    activeViewName: string;
 }
 
 class Toolbar extends React.Component<ToolbarProp, void> {
@@ -30,6 +32,10 @@ class Toolbar extends React.Component<ToolbarProp, void> {
     render() {
         let yearOptions = [];
         let monthOptions = [];
+        let activeViewClass = new Hash<string>();
+        activeViewClass['calendar-month'] = 'btn-default';
+        activeViewClass['calendar-report'] = 'btn-default';
+        activeViewClass[this.props.activeViewName] = 'btn-primary';
 
         var currentYear = new Date().getFullYear();
         for (let i of this.props.calendarYears) {
@@ -54,7 +60,7 @@ class Toolbar extends React.Component<ToolbarProp, void> {
                     <li>
                         <form className='form-inline'>
                             <div className='form-group'>
-                                <a className={'btn btn-default btn-sm ' + calendarPrevMonthClass} onClick={e => Actions.setPrevMonth()}><i className="fa fa-arrow-left" aria-hidden="true"></i></a>
+                                <a className={'btn btn-default btn-sm' + calendarPrevMonthClass} onClick={e => Actions.setPrevMonth()}><i className="fa fa-arrow-left" aria-hidden="true"></i></a>
                             </div>
                             <div className='form-group form-group-sm'>
                                 <select id="year" className="form-control" value={this.props.selectedYear} onChange={this.yearChanged}>
@@ -72,6 +78,9 @@ class Toolbar extends React.Component<ToolbarProp, void> {
                         </form>
                     </li>
                     <li></li>
+                    <li><a className={'btn ' + activeViewClass['calendar-month']} onClick={e => Actions.showViewMonthCalendar()}><i className="fa fa-calendar" aria-hidden="true"></i></a></li>
+                    <li><a className={'btn ' + activeViewClass['calendar-report']} onClick={e => Actions.showViewReportCalendar()}><i className="fa fa-bar-chart" aria-hidden="true"></i></a></li>
+                    <li></li>
                 </ul>
             </nav>)
     }
@@ -82,6 +91,7 @@ class ToolbarContainerState {
     calendarYears: Array<number>;
     calendarPrevDisabled: boolean;
     calendarNextDisabled: boolean;
+    activeViewName: string;
 }
 
 export default class ToolbarContainer extends Container<void, ToolbarContainerState> {
@@ -98,7 +108,8 @@ export default class ToolbarContainer extends Container<void, ToolbarContainerSt
             calendarState: toolbarStore.getCalendarOptions(),
             calendarYears: toolbarStore.getYears(),
             calendarPrevDisabled: toolbarStore.getIsPrevMonthDisabled(),
-            calendarNextDisabled: toolbarStore.getIsNextMonthDisabled()
+            calendarNextDisabled: toolbarStore.getIsNextMonthDisabled(),
+            activeViewName: toolbarStore.getActiveViewName()
         }
     }
 
@@ -109,7 +120,8 @@ export default class ToolbarContainer extends Container<void, ToolbarContainerSt
                 selectedMonth={this.state.value.calendarState.month} 
                 calendarYears={this.state.value.calendarYears}
                 calendarPrevDisabled={this.state.value.calendarPrevDisabled}
-                calendarNextDisabled={this.state.value.calendarNextDisabled}/>
+                calendarNextDisabled={this.state.value.calendarNextDisabled}
+                activeViewName={this.state.value.activeViewName}/>
             );
     }
 }

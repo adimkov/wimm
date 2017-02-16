@@ -11,6 +11,7 @@ import Dispatcher from '../dispatcher';
 import {Action, Actions} from '../action/action';
 import * as FinanceModel from '../model/finance';
 import { formatDate, parseDateParts } from '../services/date';
+import { Hash } from '../model/collection';
 
 export type FinanceState = Map<string, List<FinanceModel.Spending>>;
 
@@ -54,7 +55,7 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
 
         for (let weekData of spending.toArray()) {
             let weekSpending = List<FinanceModel.Spending>().asMutable();
-            let categoriesMap: {[code: string]: FinanceModel.Spending} = {};
+            let categoriesMap = new Hash<FinanceModel.Spending>();
           
             for(let daySpendings of weekData.entrySeq().toArray()) {
                 

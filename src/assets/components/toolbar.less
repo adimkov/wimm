@@ -31,12 +31,29 @@ nav.toolbar {
             }
 
             form {
+                
+                a.btn {
+                    width: auto;
+
+                    i {
+                        font-size: unset;
+                    }
+                }
+
                 & .form-group {
                     padding-right: @default-padding;
                 }
 
                 & .form-group:last-child {
                     padding-right: 0 !important;
+                }
+            }
+
+            a.btn {
+                width: 50px;
+
+                i {
+                    font-size: 22px;
                 }
             }
         }
