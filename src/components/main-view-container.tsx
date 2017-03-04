@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Container } from './container';
 import { CalendarContainer } from './calendar';
+import MonthChart from './month-chart';
 import CalendarInfo from './calendar-info';
 import { toolbarStore } from '../store/toolbar';
 import { Hash } from '../model/collection';
@@ -26,6 +27,12 @@ class MainView extends React.Component<MainViewProps, void> {
                 <CalendarContainer />
                 <CalendarInfo /> 
             </div>);
+
+        viewMap['calendar-report'] = (
+            <div>
+                <MonthChart/>
+            </div>
+        )
 
         return <div>{viewMap[this.props.activeViewName]}</div>;
     }
