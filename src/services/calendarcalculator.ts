@@ -14,5 +14,9 @@ export function calculateRowHeight(browserHeight: number, rowsCount: number): nu
 }
 
 export function calculateCellContainerHeight(rowHeight: number): number {
-    return rowHeight - header - bottom - headerPadding
+    return rowHeight - header - bottom - headerPadding;
+}
+
+export function calculateWorkSpaceHeight(browserHeight: number){
+    return browserHeight - toolbar;
 }

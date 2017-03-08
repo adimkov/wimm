@@ -11,6 +11,13 @@ export class Spending extends Record({category: null, amount: 0}) {
     setAmount(amount: number | string) {
         return new Spending(this.category, amount);
     }
+
+    addSpending(amount: number | string) {
+        let lAmount = Number.parseFloat(this.amount.toString());
+        let rAmount = Number.parseFloat(amount.toString());
+
+        return this.setAmount(lAmount + rAmount);
+    }
 }
 
 export class Category extends Record({code:'', name: '', color:'', icon:''}) {

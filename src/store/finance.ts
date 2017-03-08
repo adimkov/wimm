@@ -24,21 +24,21 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
     }
      
     getSpendings(year: number, month: number): Map<string, List<FinanceModel.Spending>> {
-        return this.getState().takeWhile((val, key) => {
+        return this.getState().filter((val, key) => {
             let date = parseDateParts(key);
             return date.getFullYear() === year && date.getMonth() === month;
         }).toMap();
     }
 
     getSpendingsPerWeek(year: number, month: number): List<Map<string, List<FinanceModel.Spending>>> {
-        var calendar = new c.Calendar(1);
-        var weeks = calendar.monthDates(year, month);
+        let calendar = new c.Calendar(1);
+        let weeks = calendar.monthDates(year, month);
         let weekSpendings = List<Map<string, List<FinanceModel.Spending>>>().asMutable();
         
         for(let week of weeks) {
-            var daySpending = Map<string, List<FinanceModel.Spending>>().asMutable();
+            let daySpending = Map<string, List<FinanceModel.Spending>>().asMutable();
             for(let day of week) {
-                daySpending.set(formatDate(day), this.getState().get(formatDate(day)) || List<FinanceModel.Spending>());
+                daySpending.set(formatDate(day), this.getState().get(formatDate(day), List<FinanceModel.Spending>()));
             }
 
             weekSpendings.push(daySpending.asImmutable());
@@ -64,8 +64,7 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
                         categoriesMap[spending.category.code] = spending;
                     } 
                     else {
-                        categoriesMap[spending.category.code] = categoriesMap[spending.category.code]
-                            .setAmount(Number.parseFloat(categoriesMap[spending.category.code].amount.toString()) + Number.parseFloat(spending.amount.toString()));
+                        categoriesMap[spending.category.code] = categoriesMap[spending.category.code].addSpending(spending.amount);
                     }
 
                     if (parseDateParts(daySpendings[0]).getMonth() === month) {
@@ -73,8 +72,7 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
                             monthCategoriesMap[spending.category.code] = spending;
                         } 
                         else {
-                            monthCategoriesMap[spending.category.code] = monthCategoriesMap[spending.category.code]
-                                .setAmount(Number.parseFloat(monthCategoriesMap[spending.category.code].amount.toString()) + Number.parseFloat(spending.amount.toString()));
+                            monthCategoriesMap[spending.category.code] = monthCategoriesMap[spending.category.code].addSpending(spending.amount);
                         }
                     }
                 }
@@ -95,6 +93,37 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
             weeksSpending: List(weeksSpending),
             monthSpending: List(monthSpending)
         };
+    }
+
+    getMonthChartData(year: number, month: number): Map<number, List<FinanceModel.Spending>> {
+        let data = Map<number, List<FinanceModel.Spending>>().asMutable();
+        let calendar = new c.Calendar(1);
+        let dates = calendar.monthDates(year, month)
+            .reduce((previous, current) => previous.concat(current))
+            .filter(x => x.getMonth() === month);
+        
+        for (let day of dates) {
+            var daySpendings = this.getState().get(formatDate(day), List<FinanceModel.Spending>());
+            let aggregatedSpendings = new Hash<FinanceModel.Spending>();
+            let spendings = List<FinanceModel.Spending>().asMutable();
+
+            for (let spending of daySpendings.toArray()) {
+                 if (aggregatedSpendings[spending.category.code] === undefined) {
+                     aggregatedSpendings[spending.category.code] = spending;
+                 }
+                 else {
+                     aggregatedSpendings[spending.category.code] = aggregatedSpendings[spending.category.code].addSpending(spending.amount);
+                 }
+            }
+
+            for (let spending in aggregatedSpendings) {
+                spendings.push(aggregatedSpendings[spending]);
+            }
+
+            data.set(day.getDate(), spendings.asImmutable());
+        }        
+
+        return data.asImmutable();
     }
 
     reduce(state: FinanceState, action: Action<any>) {

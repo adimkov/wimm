@@ -1,25 +1,104 @@
 import * as React from 'react';
+import { Map, List } from 'immutable';
+import Chartist from 'chartist';
+import ChartistGraph from 'react-chartist';
+const ChartistTooltips = require('chartist-plugin-tooltips');// because of design emulation of common js
+
 import { Container } from './container';
 import { Actions } from '../action/action';
+import ReactResizeDetector from 'react-resize-detector';
+import { calculateWorkSpaceHeight } from '../services/calendarcalculator';
+import * as FinanceModel from '../model/finance';
+import { financeStore } from '../store/finance';
+import { toolbarStore } from '../store/toolbar';
+import { spendingStore } from '../store/spending';
 
-class MonthChartProp {
+interface MonthChartProp {
+    monthData: Map<number, List<FinanceModel.Spending>>;
+    categories: Array<FinanceModel.Category>;
 }
 
-class MonthChart extends React.Component<MonthChartProp, void> {
+interface MonthChartState {
+    browserHeight: number;
+}
+
+class MonthChart extends React.Component<MonthChartProp, MonthChartState> {
     constructor(props?: MonthChartProp, context?: any) {
-            super(props, context);
+        super(props, context);
+        this.state = {browserHeight: document.body.clientHeight};
     }
 
+    onResize(width: number, height: number) {
+        this.setState({browserHeight: height});
+    }
+    
+    getChartOptions() {
+        return {
+            stackBars: true,
+            height: calculateWorkSpaceHeight(this.state.browserHeight),
+            plugins: [
+                ChartistTooltips()
+            ]
+        }
+    }
+
+    onDraw(context) {
+        if(context.type === 'bar') {
+            context.element.attr({
+                style: 'stroke-width: 30px; stroke: ' + this.props.categories[context.seriesIndex].color,
+                mouseenter: "console.log('bar')"
+            });
+        }  
+    }
+
+    getData() {
+        let days = this.props.monthData.entrySeq().toArray().map(x => x[0]);
+        let series = new Array<Array<any>>()
+        let categories = this.props.categories;
+
+        for(let category of categories.map(x => x.code)) {
+            let categorySpendings = new Array<any>();
+
+            for(let day of days) {
+                var daySpendings = this.props.monthData.get(day);
+                let spending = daySpendings.find(x => x.category.code === category);
+                if (spending !== undefined) {
+                    categorySpendings.push({meta: spending.category.name, value: Number.parseInt(spending.amount.toString())});
+                }
+                else {
+                    categorySpendings.push({meta: '', value: 0});
+                }
+            }
+
+            series.push(categorySpendings);
+        }
+        
+        return {labels: days, series: series}
+    }
 
     render() {
+        var biPolarLineChartOptions = {
+            stackBars: true,
+        }
+
+        var listener = {
+            draw: this.onDraw.bind(this)
+        }
+
         return (
-            <div>
+            <div className="report">
+                <ReactResizeDetector handleHeight handleWeight onResize={ this.onResize.bind(this) } />
+                <ChartistGraph data={this.getData()} options={this.getChartOptions()} listener={listener} type={'Bar'} />
+                <div>
+                </div>
             </div>
         )
     }
 }
 
-class MonthChartContainerState {
+interface MonthChartContainerState {
+    monthData: Map<number, List<FinanceModel.Spending>>;
+    categories: Array<FinanceModel.Category>;
 }
 
 export default class MonthChartContainer extends Container<void, MonthChartContainerState> {
@@ -28,17 +107,25 @@ export default class MonthChartContainer extends Container<void, MonthChartConta
     }
 
     getStores() {
-        return [];
+        return [
+            financeStore, toolbarStore
+        ];
     }
 
     calculateState() {
+        let year = toolbarStore.getCalendarOptions().year;
+        let month = toolbarStore.getCalendarOptions().month;
+        let categories = spendingStore.getCategories().toArray();
+
         return {
+            monthData: financeStore.getMonthChartData(year, month),
+            categories: categories,
         }
     }
 
     render() {
         return (
-                <MonthChart/>
+                <MonthChart monthData={this.state.value.monthData} categories={this.state.value.categories}/>
             );
     }
 }

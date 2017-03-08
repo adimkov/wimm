@@ -44,7 +44,9 @@ gulp.task('src-assets', ['src-assets-styles', 'src-assets-img'])
 
 gulp.task('copy-assets', function() {
     return gulp.src([
-        './bower_components/**/*.+(min.css|otf|eot|svg|ttf|woff|woff2)'])
+        './bower_components/**/*.+(min.css|otf|eot|svg|ttf|woff|woff2)', 
+        './node_modules/chartist/dist/*.+(min.css|otf|eot|svg|ttf|woff|woff2)',
+        './node_modules/chartist-plugin-tooltips/dist/*.+(css|otf|eot|svg|ttf|woff|woff2)'])
     .pipe(gulp.dest('./dist/assets'));
 });
 
