@@ -5,4 +5,18 @@
     height: 100%;
     position: absolute;
     padding: @ribbon-width @default-padding @default-padding @default-padding;
+
+    ul.chart-legend {
+        list-style-type: none;
+        height: @ribbon-width/2;
+        text-align: center;
+        
+        li.chart-legend-item {
+            display: inline;
+            margin: 0px 10px;
+            border-left-width: 25px;
+            border-left-style: solid;
+            padding-left: 5px;
+        }
+    }
 }

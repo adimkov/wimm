@@ -35,7 +35,7 @@ class MonthChart extends React.Component<MonthChartProp, MonthChartState> {
     getChartOptions() {
         return {
             stackBars: true,
-            height: calculateWorkSpaceHeight(this.state.browserHeight),
+            height: calculateWorkSpaceHeight(this.state.browserHeight) - 30,
             plugins: [
                 ChartistTooltips()
             ]
@@ -45,8 +45,7 @@ class MonthChart extends React.Component<MonthChartProp, MonthChartState> {
     onDraw(context) {
         if(context.type === 'bar') {
             context.element.attr({
-                style: 'stroke-width: 30px; stroke: ' + this.props.categories[context.seriesIndex].color,
-                mouseenter: "console.log('bar')"
+                style: 'stroke-width: 30px; stroke: ' + this.props.categories[context.seriesIndex].color
             });
         }  
     }
@@ -77,21 +76,38 @@ class MonthChart extends React.Component<MonthChartProp, MonthChartState> {
     }
 
     render() {
-        var biPolarLineChartOptions = {
-            stackBars: true,
-        }
-
-        var listener = {
+        let listener = {
             draw: this.onDraw.bind(this)
         }
-
+        
+        let legend = this.props.categories.map(x => <CategoryLegendItem key={x.code} category={x}/>)
         return (
             <div className="report">
                 <ReactResizeDetector handleHeight handleWeight onResize={ this.onResize.bind(this) } />
                 <ChartistGraph data={this.getData()} options={this.getChartOptions()} listener={listener} type={'Bar'} />
-                <div>
-                </div>
+                <ul className='chart-legend'>
+                    {legend}
+                </ul>
             </div>
+        )
+    }
+}
+
+interface ChartLegendItem {
+    category: FinanceModel.Category
+}
+
+class CategoryLegendItem extends React.Component<ChartLegendItem, void> {
+   constructor(props?: ChartLegendItem, context?: any) {
+        super(props, context);
+    }
+
+    render () {
+        
+        return (
+            <li className='chart-legend-item' style={{borderColor: this.props.category.color}}>
+                {this.props.category.name}
+            </li>
         )
     }
 }
