@@ -44,7 +44,7 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
     }
 
     commitSpending(e: React.SyntheticEvent<any>) {
-        Actions.CommitSpending(this.props.currentEdit.category, Number.parseFloat(this.props.currentEdit.amount.toString()), this.props.date)
+        Actions.commitSpending(this.props.currentEdit.category, Number.parseFloat(this.props.currentEdit.amount.toString()), this.props.date)
         Actions.cleanEditSpending();
         Actions.closeSidebar();
         e.preventDefault();

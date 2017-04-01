@@ -51,3 +51,9 @@ export interface EditSpendingCommand {
     amount: number | string;
     date: Date;
 }
+
+export interface DeleteSpendingCommand {
+    category: string;
+    amount: number;
+    date: Date;
+}

@@ -103,7 +103,7 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
             .filter(x => x.getMonth() === month);
         
         for (let day of dates) {
-            var daySpendings = this.getState().get(formatDate(day), List<FinanceModel.Spending>());
+            let daySpendings = this.getState().get(formatDate(day), List<FinanceModel.Spending>());
             let aggregatedSpendings = new Hash<FinanceModel.Spending>();
             let spendings = List<FinanceModel.Spending>().asMutable();
 
@@ -128,8 +128,11 @@ class FinanceStore extends IpcReduceStore<FinanceState, Action<any>> {
 
     reduce(state: FinanceState, action: Action<any>) {
         switch(action.type) {
-            case Actions.CommitSpending:
+            case Actions.commitSpending:
                 return commitSpending(state, action.payload as FinanceModel.CommitSpendingCommand);
+            case Actions.deleteSpending:
+                let command = action.payload as FinanceModel.DeleteSpendingCommand;
+                return deleteSpending(state, command.date, command.category, command.amount);
             case Actions.flushFinanceStore:
                 return flushStore(state);
             case "importState":
@@ -202,6 +205,19 @@ function exportDatabase(path: string) {
 function importDatabase(path: string) {
     let file = zlip.unzipSync(readFileSync(path)).toString('utf-8');
     return prepareState(JSON.parse(file));
+}
+
+function deleteSpending(state: FinanceState, date: Date, category: string, amount: number) {
+    let daySpendings = state.get(formatDate(date), List<FinanceModel.Spending>());
+    let spendingIndex = daySpendings.findIndex(x => x.category.code == category && x.amount == amount);
+
+    if (spendingIndex > 0) {
+        daySpendings = daySpendings.remove(spendingIndex);
+        return state.set(formatDate(date), daySpendings);
+    }
+    else {
+        return state;
+    }
 }
 
 export let financeStore = new FinanceStore(Dispatcher);

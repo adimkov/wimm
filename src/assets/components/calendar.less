@@ -4,6 +4,7 @@
 @cellContentBottomHeight: 23px;
 @cellContentBottomBackground: #fafafa;
 @cellContentBottomBorder: 1px solid;
+@spendingHighlight: 2px solid;
 
 .calendar-container {
 
@@ -48,7 +49,22 @@
                 
                 .cell-container {
                     overflow-x: auto;
-                    margin: 0 -@default-padding 0 -@default-padding
+                    margin: 0 -@default-padding 0 -@default-padding;
+                    
+                    .spending-row {
+                       .spending-row-buttons {
+                            cursor: pointer;
+                            display: block;
+                        }
+
+                        &:hover {
+                            border-bottom: @spendingHighlight;
+
+                           .spending-row-buttons {
+                                visibility: visible;
+                            }
+                        }
+                    }
                 }
 
                 .cell-bottom {
@@ -63,6 +79,15 @@
             }
 
             .mute {
+                .spending-row {
+                        cursor: default !important;
+                        border-bottom: none !important;
+
+                        .spending-row-buttons {
+                            display: none !important;
+                        }
+                }
+
                 .cell-bottom {
                     background: none;
 
@@ -86,7 +111,13 @@
         background-color: #fafafa;
         border-left-width: @default-padding;
         border-left-style: solid;
-        padding-left: @default-padding
+        padding-left: @default-padding;
+        cursor: default;
+        
+        .spending-row-buttons {
+            margin-right: 12px;
+            visibility: hidden;
+        }
     }
 
     .row-total {

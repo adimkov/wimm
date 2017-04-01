@@ -57,19 +57,27 @@ export class Actions {
         dispatcher.dispatch(new Action(Actions.spendingKeypadRelease, null));
     }
 
-    static CommitSpending(category: Finance.Category, amount: number, date: Date) {
-        dispatcher.dispatch(new Action<Finance.CommitSpendingCommand>(Actions.CommitSpending, {category: category, amount: amount, date: date}));
+    static commitSpending(category: Finance.Category, amount: number, date: Date) {
+        dispatcher.dispatch(new Action<Finance.CommitSpendingCommand>(Actions.commitSpending, {category: category, amount: amount, date: date}));
     }
     
-    static flushFinanceStore(){
+    static flushFinanceStore() {
         dispatcher.dispatch(new Action(Actions.flushFinanceStore, null));
     }
 
-    static showViewMonthCalendar(){
+    static showViewMonthCalendar() {
         dispatcher.dispatch(new Action(Actions.showViewMonthCalendar, null));
     }
 
-    static showViewReportCalendar(){
+    static showViewReportCalendar() {
         dispatcher.dispatch(new Action(Actions.showViewReportCalendar, null));
+    }
+
+    static deleteSpending(date: Date, category: string, amount: number) {
+        dispatcher.dispatch(new Action<Finance.DeleteSpendingCommand>(Actions.deleteSpending, {date: date, category: category, amount: amount}));
+    }
+
+    static showDeleteSpending(date: Date, category: string, amount: number) {
+        dispatcher.dispatch(new Action<Finance.DeleteSpendingCommand>(Actions.showDeleteSpending, {date: date, category: category, amount: amount}));
     }
 }

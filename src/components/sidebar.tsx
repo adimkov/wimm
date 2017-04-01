@@ -3,7 +3,9 @@ import * as React from 'react';
 import { Container } from './container';
 import { sidebarStore } from '../store/sidebar';
 import { SidebarCommand } from '../model/sidebar';
-import AddSpending from './spending';
+import AddSpending from './add-spending';
+import DeleteSpending from './delete-spending';
+
 import { Actions } from '../action/action';
 
 class SidebarProp {
@@ -68,6 +70,8 @@ export default class SidebarContainer extends Container<void, SidebarContainerSt
         switch(command.type) {
             case 'addSpending':
                 return <AddSpending date={command.payload}/>;
+            case 'deleteSpending':
+                return <DeleteSpending date={command.payload.date} category={command.payload.category} amount={command.payload.amount}/>;
             default:
                 return null;
         }
@@ -75,7 +79,8 @@ export default class SidebarContainer extends Container<void, SidebarContainerSt
 
     getHeader(command: SidebarCommand<any>) {
         let headers = {
-            addSpending: 'Add spending'
+            addSpending: 'Add spending',
+            deleteSpending: 'Delete spending'
         }
 
         if (command === null || command === undefined) {

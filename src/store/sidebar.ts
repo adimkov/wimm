@@ -19,6 +19,8 @@ class SidebarStore extends IpcReduceStore<SidebarState, Action<any>> {
         switch(action.type) {
             case Actions.showEditSpendingDialog:
                 return openSidebar(state, new SidebarCommand('addSpending', action.payload));
+            case Actions.showDeleteSpending:
+                return openSidebar(state, new SidebarCommand('deleteSpending', action.payload));
             case Actions.closeSidebar:
                 return closeSidebar(state);
         }

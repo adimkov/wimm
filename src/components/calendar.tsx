@@ -31,20 +31,20 @@ class Calendar extends React.Component<CalendarProps, CalendarState> {
     onResize(width: number, height: number) {
         this.setState({browserHeight: height});
     }
-    
+
     render() {
         let calendar = new c.Calendar(1);
         let weekDates = calendar.monthDates(this.props.year, this.props.month);
 
         let calendarTable = weekDates.map((dates, index) => {
-            return <CalendarMonthWeekRow 
-                    key={index} 
-                    week={dates} 
+            return <CalendarMonthWeekRow
+                    key={index}
+                    week={dates}
                     targetMonth={this.props.month}
                     weekSpending={this.props.weeklySpending.get(index)}
                     rowHeight = {calculateRowHeight(this.state.browserHeight, weekDates.length)}
             />});
-        
+
         return (
                 <div className='calendar'>
                     <ReactResizeDetector handleHeight onResize={ this.onResize.bind(this) } />
@@ -82,12 +82,12 @@ class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, vo
 
      render() {
         const today = new Date();
-        const week = this.props.week.map((day, index) => 
-            <CalendarMonthCell 
-                key={index} 
-                date={day} 
+        const week = this.props.week.map((day, index) =>
+            <CalendarMonthCell
+                key={index}
+                date={day}
                 targetMonth={this.props.targetMonth}
-                daySpending={this.props.weekSpending.get(formatDate(day))} 
+                daySpending={this.props.weekSpending.get(formatDate(day))}
                 rowHeight={this.props.rowHeight}
                 isCurrentDate={day.getFullYear() == today.getFullYear() && day.getMonth() == today.getMonth() && day.getDate() == today.getDate()}
             />)
@@ -114,7 +114,11 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         e.stopPropagation();
         Actions.showEditSpendingDialog(this.props.date);
     }
-    
+
+    removeSpending(spending: FinanceModel.Spending) {
+        Actions.showDeleteSpending(this.props.date, spending.category.code, Number.parseFloat(spending.amount.toString()));
+    }
+
     render() {
         const cellContainerStyle = {
             height: calculateCellContainerHeight(this.props.rowHeight)
@@ -125,13 +129,13 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         }
 
         let cellClass = '';
-        let isCurrentMonth = this.props.date.getMonth() !== this.props.targetMonth; 
+        let isNotCurrentMonth = this.props.date.getMonth() !== this.props.targetMonth;
         let addButton = (
             <button type='button' className='btn btn-outline-primary btn-xs pull-right' onClick={this.addSpending.bind(this)}>
                 <i className='fa fa-plus' aria-hidden="true"></i>
             </button>);
 
-        if (isCurrentMonth) {
+        if (isNotCurrentMonth) {
             cellClass += 'mute';
             addButton = null;
         }
@@ -146,15 +150,20 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
 
         if (sum > 0) {
              sumElt = <CalendarMonthCellTotal sum={sum}/>
-        } 
+        }
 
-        let spendings = this.props.daySpending.map((x, i) => 
-            <CalendarMonthCellSpendingRow 
+        let spendings = this.props.daySpending.map((x, i) =>
+            <CalendarMonthCellSpendingRow
                 key={`${this.props.date.getDate()}_${i}`}
-                category={x.category.name} 
-                color={x.category.color} 
-                icon={x.category.icon} 
-                amount={x.amount}/>)
+                category={x.category.name}
+                color={x.category.color}
+                icon={x.category.icon}
+                amount={x.amount}
+                isAllowInteraction={!isNotCurrentMonth}
+                removeCommand={
+                    (() => this.removeSpending(x)).bind(this)
+                    }/>
+                )
 
         return (
             <td className={cellClass} style={cellStyle}>
@@ -176,25 +185,37 @@ class CalendarMonthCellSpendingRowProp {
     color: string;
     icon: string;
     amount: number | string;
-} 
+    removeCommand?: (category: string, amount: number | string) => void;
+    isAllowInteraction?: Boolean;
+}
 
 export class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, void> {
     constructor(props?: CalendarMonthCellSpendingRowProp, context?: any) {
         super(props, context);
     }
 
+    removeCommand(e: React.SyntheticEvent<Element>) {
+        e.stopPropagation();
+        if (this.props.isAllowInteraction && this.props.removeCommand != undefined) {
+            this.props.removeCommand(this.props.category, this.props.amount);
+        }
+    }
+
     render() {
         const spendingStyle = {
-            borderLeftColor: this.props.color
+            borderColor: this.props.color,
         }
-        
+
         const spendingCategoryStyle = {
             color: this.props.color
         }
 
         return (
-        <div className='spending-row' style={spendingStyle}>
+        <div className='spending-row' style={spendingStyle} >
             <span className='spending-header' style={spendingCategoryStyle}>{this.props.category}</span>{Number.parseFloat(this.props.amount.toString()).toFixed(2)}
+            <div className='spending-row-buttons pull-right' onClick={this.removeCommand.bind(this)}>
+                <i className='fa fa-times'></i>
+            </div>
         </div>);
     }
 }
@@ -202,7 +223,7 @@ export class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthC
 interface CalendarContainerState {
     ribbonCalendarState: SelectedDate;
     weeklySpending: List<Map<string, List<FinanceModel.Spending>>>;
-} 
+}
 
 interface CalendarMonthCellTotalProp {
     sum: number;
@@ -240,8 +261,8 @@ export class CalendarContainer extends Container<void, CalendarContainerState> {
     }
 
     render() {
-        return <Calendar 
-            year={this.state.value.ribbonCalendarState.year} 
+        return <Calendar
+            year={this.state.value.ribbonCalendarState.year}
             month={this.state.value.ribbonCalendarState.month}
             weeklySpending={this.state.value.weeklySpending}/>;
     }
