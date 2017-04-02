@@ -211,7 +211,7 @@ function deleteSpending(state: FinanceState, date: Date, category: string, amoun
     let daySpendings = state.get(formatDate(date), List<FinanceModel.Spending>());
     let spendingIndex = daySpendings.findIndex(x => x.category.code == category && x.amount == amount);
 
-    if (spendingIndex > 0) {
+    if (spendingIndex >= 0) {
         daySpendings = daySpendings.remove(spendingIndex);
         return state.set(formatDate(date), daySpendings);
     }

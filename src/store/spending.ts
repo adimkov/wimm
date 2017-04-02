@@ -36,6 +36,10 @@ class SpendingStore extends IpcReduceStore<SpendingState, Action<any>> {
         return this.getState().get('categories');
     }
 
+    getCategory(code: string): FinanceModel.Category {
+        return (<List<FinanceModel.Category>>this.getState().get('categories')).find(x => x.code === code);
+    }
+
     getCurrentlyEditSpending(): FinanceModel.Spending {
         return this.getState().get('spending.edit') || new FinanceModel.Spending(this.getCategories().first(), 0);
     }
