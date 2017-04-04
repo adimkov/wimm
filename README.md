@@ -14,5 +14,5 @@ Application builds summury based on added spendings and shows how many was spent
 
 All data stored on local computer into user's directory as simple json file. 
 
-![main](https://cloud.githubusercontent.com/assets/1008064/23809105/99271240-05cc-11e7-9123-0413f55f0919.png)
-![chart](https://cloud.githubusercontent.com/assets/1008064/23809104/99224e40-05cc-11e7-919a-b0af9b964898.png)
+![main](https://cloud.githubusercontent.com/assets/1008064/24655018/a0e8c068-193c-11e7-9608-0326ba455a80.png)
+![chart](https://cloud.githubusercontent.com/assets/1008064/24655041/b6ef2f32-193c-11e7-8621-e8a7111e0089.png)
