@@ -55,7 +55,7 @@ class Toolbar extends React.Component<ToolbarProp, void> {
         return (
             <nav className='toolbar'>
                 <ul>
-                    <li><a className='btn btn-default btn-sm' onClick={e => Actions.flushFinanceStore()}>Save</a></li>
+                    <li><a className='btn btn-primary btn-sm' onClick={e => Actions.flushFinanceStore()}>Save</a></li>
                     <li></li>
                     <li>
                         <form className='form-inline'>
