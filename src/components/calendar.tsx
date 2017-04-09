@@ -90,6 +90,7 @@ class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, vo
                 daySpending={this.props.weekSpending.get(formatDate(day))}
                 rowHeight={this.props.rowHeight}
                 isCurrentDate={day.getFullYear() == today.getFullYear() && day.getMonth() == today.getMonth() && day.getDate() == today.getDate()}
+                isAllowAdd={day <= today}
             />)
         return (
             <tr>{ week }</tr>
@@ -103,6 +104,7 @@ interface CalendarMonthCellProp {
     daySpending: List<FinanceModel.Spending>;
     rowHeight: number;
     isCurrentDate: boolean;
+    isAllowAdd: boolean;
 }
 
 class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
@@ -123,7 +125,6 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
         const cellContainerStyle = {
             height: calculateCellContainerHeight(this.props.rowHeight)
         }
-
         const cellStyle = {
             height: this.props.rowHeight
         }
@@ -137,6 +138,10 @@ class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
 
         if (isNotCurrentMonth) {
             cellClass += 'mute';
+            addButton = null;
+        }
+
+        if (isNotCurrentMonth || !this.props.isAllowAdd) {
             addButton = null;
         }
 
