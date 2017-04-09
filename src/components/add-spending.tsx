@@ -50,6 +50,10 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
         e.preventDefault();
     }
 
+    clearAmount() {
+        Actions.setEditSpending(this.props.currentEdit.category.code, 0, this.props.date);
+    }
+
     render() {
         let categories = this.props.categories.map(x => 
             <DropdownOption key={x.code} value={x.code}>
@@ -69,7 +73,12 @@ class AddSpending extends React.Component<AddSpendingProp, void> {
                     </div>
                     <div className='form-group'>
                         <label>Spending</label>
-                        <NumericInput  value={this.props.currentEdit.amount} precision={2} min={0} step={0.1} onChange={this.updateAmount.bind(this)} className='form-control input-sm'/>
+                        <div className='input-group input-group-sm'>
+                            <NumericInput  value={this.props.currentEdit.amount} precision={2} min={0} step={0.1} onChange={this.updateAmount.bind(this)} className='form-control input-sm'/>
+                            <span className="input-group-btn">
+                                <button className="btn btn-default btn-sm" type="button"><i className="fa fa-eraser" onClick={this.clearAmount.bind(this)}></i></button>
+                            </span>
+                        </div>
                     </div>
                     <div className='form-group'>
                         <NumberKeypad/>
