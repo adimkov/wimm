@@ -15,6 +15,7 @@ import { spendingStore } from '../store/spending';
 
 interface MonthChartProp {
     monthData: Map<number, List<FinanceModel.Spending>>;
+    categorySpending: List<FinanceModel.Spending>;
     categories: Array<FinanceModel.Category>;
 }
 
@@ -75,12 +76,21 @@ class MonthChart extends React.Component<MonthChartProp, MonthChartState> {
         return {labels: days, series: series}
     }
 
+    getCategoryAmount(categoryCode: string): number {
+        let spendingIndex = this.props.categorySpending.findIndex(x => x.category.code === categoryCode);
+        if (spendingIndex > 0) {
+            return Number.parseFloat(this.props.categorySpending.get(spendingIndex).amount.toString());
+        }
+
+        return 0;
+    }
+
     render() {
         let listener = {
             draw: this.onDraw.bind(this)
         }
         
-        let legend = this.props.categories.map(x => <CategoryLegendItem key={x.code} category={x}/>)
+        let legend = this.props.categories.map(x => <CategoryLegendItem key={x.code} category={x} sumAmount={this.getCategoryAmount(x.code)}/>)
         return (
             <div className="report">
                 <ReactResizeDetector handleHeight handleWeight onResize={ this.onResize.bind(this) } />
@@ -95,6 +105,7 @@ class MonthChart extends React.Component<MonthChartProp, MonthChartState> {
 
 interface ChartLegendItem {
     category: FinanceModel.Category
+    sumAmount: number
 }
 
 class CategoryLegendItem extends React.Component<ChartLegendItem, void> {
@@ -106,7 +117,7 @@ class CategoryLegendItem extends React.Component<ChartLegendItem, void> {
         
         return (
             <li className='chart-legend-item' style={{borderColor: this.props.category.color}}>
-                {this.props.category.name}
+                ({this.props.sumAmount.toFixed(2)}) {this.props.category.name}
             </li>
         )
     }
@@ -114,6 +125,7 @@ class CategoryLegendItem extends React.Component<ChartLegendItem, void> {
 
 interface MonthChartContainerState {
     monthData: Map<number, List<FinanceModel.Spending>>;
+    categorySpending: List<FinanceModel.Spending>;
     categories: Array<FinanceModel.Category>;
 }
 
@@ -132,16 +144,18 @@ export default class MonthChartContainer extends Container<void, MonthChartConta
         let year = toolbarStore.getCalendarOptions().year;
         let month = toolbarStore.getCalendarOptions().month;
         let categories = spendingStore.getCategories().toArray();
+        let categorySpending = financeStore.getSpendingStatisticForCalendar(year, month).monthSpending;
 
         return {
             monthData: financeStore.getMonthChartData(year, month),
+            categorySpending: categorySpending,
             categories: categories,
         }
     }
 
     render() {
         return (
-                <MonthChart monthData={this.state.value.monthData} categories={this.state.value.categories}/>
+                <MonthChart monthData={this.state.value.monthData} categories={this.state.value.categories} categorySpending={this.state.value.categorySpending}/>
             );
     }
 }
