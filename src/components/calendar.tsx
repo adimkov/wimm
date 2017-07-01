@@ -75,7 +75,7 @@ interface CalendarMonthWeekRowProps{
     rowHeight: number;
 }
 
-class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, void> {
+class CalendarMonthWeekRow extends React.Component<CalendarMonthWeekRowProps, {}> {
     constructor(props?: CalendarMonthWeekRowProps, context?: any) {
         super(props, context);
     }
@@ -107,7 +107,7 @@ interface CalendarMonthCellProp {
     isAllowAdd: boolean;
 }
 
-class CalendarMonthCell extends React.Component<CalendarMonthCellProp, void> {
+class CalendarMonthCell extends React.Component<CalendarMonthCellProp, {}> {
     constructor(props?: CalendarMonthCellProp, context?: any) {
         super(props, context);
     }
@@ -194,7 +194,7 @@ class CalendarMonthCellSpendingRowProp {
     isAllowInteraction?: Boolean;
 }
 
-export class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, void> {
+export class CalendarMonthCellSpendingRow extends React.Component<CalendarMonthCellSpendingRowProp, {}> {
     constructor(props?: CalendarMonthCellSpendingRowProp, context?: any) {
         super(props, context);
     }
@@ -234,7 +234,7 @@ interface CalendarMonthCellTotalProp {
     sum: number;
 }
 
-export class CalendarMonthCellTotal extends React.Component<CalendarMonthCellTotalProp, void> {
+export class CalendarMonthCellTotal extends React.Component<CalendarMonthCellTotalProp, {}> {
     constructor(props?: CalendarMonthCellTotalProp, context?: any) {
         super(props, context);
     }
@@ -248,8 +248,8 @@ export class CalendarMonthCellTotal extends React.Component<CalendarMonthCellTot
     }
 }
 
-export class CalendarContainer extends Container<void, CalendarContainerState> {
-    constructor(props?: void, context?: any) {
+export class CalendarContainer extends Container<{}, CalendarContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
 

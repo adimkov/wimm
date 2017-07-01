@@ -67,7 +67,7 @@ interface CalendarWeekMonthInfoProps {
     rowHeight: number;
 }
 
-class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, void> {
+class CalendarWeekMonthInfo extends React.Component<CalendarWeekMonthInfoProps, {}> {
     constructor(props?: CalendarWeekMonthInfoProps, context?: any) {
             super(props, context);
     }
@@ -120,8 +120,8 @@ interface CalendarContainerState {
     monthlySpendingStatistic: FinanceModel.CalendarMonthlyStatistic;
 }
 
-export default class CalendarInfoContainer extends Container<void, CalendarContainerState> {
-    constructor(props?: void, context?: any) {
+export default class CalendarInfoContainer extends Container<{}, CalendarContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
 

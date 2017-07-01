@@ -15,7 +15,7 @@
     "bower": "^1.8.0",
     "electron": "^1.6.0",
     "electron-packager": "^8.5.1",
-    "glup": "^1.0.14",
+    "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-concat-css": "^2.3.0",
     "gulp-exec": "^2.1.3",

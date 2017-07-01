@@ -8,7 +8,7 @@ interface NumberKeypadProp {
     pressedKey: string;
 }
 
-class NumberKeypad extends React.Component<NumberKeypadProp, void> {
+class NumberKeypad extends React.Component<NumberKeypadProp, {}> {
     constructor(props?: NumberKeypadProp, context?: any) {
             super(props, context);
     }
@@ -70,8 +70,8 @@ interface NumberKeypadContainerState {
     pressedKey: string;
 }
 
-export default class NumberKeypadContainer extends Container<void, NumberKeypadContainerState> {
-    constructor(props?: void, context?: any) {
+export default class NumberKeypadContainer extends Container<{}, NumberKeypadContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
 

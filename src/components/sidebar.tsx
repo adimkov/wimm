@@ -13,7 +13,7 @@ class SidebarProp {
     header: string;
 }
 
-class Sidebar extends React.Component<SidebarProp, void> {
+class Sidebar extends React.Component<SidebarProp, {}> {
     constructor(props?: SidebarProp, context?: any) {
             super(props, context);
     }
@@ -47,8 +47,8 @@ class SidebarContainerState {
     sidebarContent: SidebarCommand<any>
 }
 
-export default class SidebarContainer extends Container<void, SidebarContainerState> {
-    constructor(props?: void, context?: any) {
+export default class SidebarContainer extends Container<{}, SidebarContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
 

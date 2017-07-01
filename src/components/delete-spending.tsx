@@ -11,7 +11,7 @@ interface DeleteSpendingProp {
     amount: number
 }
 
-class DeleteSpending extends React.Component<DeleteSpendingProp, void> {
+class DeleteSpending extends React.Component<DeleteSpendingProp, {}> {
     constructor(props?: DeleteSpendingProp, context?: any) {
             super(props, context);
    }

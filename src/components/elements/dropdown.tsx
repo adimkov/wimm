@@ -72,7 +72,7 @@ export class Dropdown extends React.Component<DropdownProp, DropdownState> {
     }
 }
 
-export class DropdownOption extends React.Component<DropdownOptionProp, void> {
+export class DropdownOption extends React.Component<DropdownOptionProp, {}> {
     constructor(props?: DropdownOptionProp, context?: any) {
             super(props, context);
     }

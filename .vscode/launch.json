@@ -10,7 +10,7 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "program": "${workspaceRoot}/dist/main.js",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/dist/**/*.js"],
             "preLaunchTask": "build",

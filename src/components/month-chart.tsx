@@ -108,7 +108,7 @@ interface ChartLegendItem {
     sumAmount: number
 }
 
-class CategoryLegendItem extends React.Component<ChartLegendItem, void> {
+class CategoryLegendItem extends React.Component<ChartLegendItem, {}> {
    constructor(props?: ChartLegendItem, context?: any) {
         super(props, context);
     }
@@ -129,8 +129,8 @@ interface MonthChartContainerState {
     categories: Array<FinanceModel.Category>;
 }
 
-export default class MonthChartContainer extends Container<void, MonthChartContainerState> {
-    constructor(props?: void, context?: any) {
+export default class MonthChartContainer extends Container<{}, MonthChartContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
 

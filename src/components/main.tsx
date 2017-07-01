@@ -4,8 +4,8 @@ import { MainViewContainer } from './main-view-container'
 import Toolbar from './toolbar';
 import Sidebar from './sidebar';
 
-export class Main extends React.Component<void, void> {
-    constructor(props?: void, context?: any) {
+export class Main extends React.Component {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
     

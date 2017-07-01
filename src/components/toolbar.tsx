@@ -15,7 +15,7 @@ class ToolbarProp {
     activeViewName: string;
 }
 
-class Toolbar extends React.Component<ToolbarProp, void> {
+class Toolbar extends React.Component<ToolbarProp, {}> {
     constructor(props?: ToolbarProp, context?: any) {
             super(props, context);
     }
@@ -94,8 +94,8 @@ class ToolbarContainerState {
     activeViewName: string;
 }
 
-export default class ToolbarContainer extends Container<void, ToolbarContainerState> {
-    constructor(props?: void, context?: any) {
+export default class ToolbarContainer extends Container<{}, ToolbarContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
 

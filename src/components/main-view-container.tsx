@@ -12,7 +12,7 @@ interface MainViewProps {
     activeViewName: string;
 } 
 
-class MainView extends React.Component<MainViewProps, void> {
+class MainView extends React.Component<MainViewProps, {}> {
     constructor(props?: MainViewProps, context?: any) {
             super(props, context);
     }
@@ -42,8 +42,8 @@ interface MainViewContainerState {
     activeViewName: string;
 } 
 
-export class MainViewContainer extends Container<void, MainViewContainerState> {
-    constructor(props?: void, context?: any) {
+export class MainViewContainer extends Container<{}, MainViewContainerState> {
+    constructor(props?: {}, context?: any) {
         super(props, context);
     }
     

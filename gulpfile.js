@@ -68,20 +68,20 @@ gulp.task('clean', function() {
 
 gulp.task('build-publish-win', function() {
     return gulp.src('/')
-        .pipe(exec('electron-packager ./dist --out=./publish --platform=win32 --asar --overwrite --icon=./dist/assets/logo-win.ico'))
+        .pipe(exec('./node_modules/.bin/electron-packager ./dist --out=./publish --platform=win32 --asar --overwrite --icon=./dist/assets/logo-win.ico'))
         .pipe(exec.reporter());
 });
 
 gulp.task('build-publish-linux', function() {
     return gulp.src('/')
-        .pipe(exec('electron-packager ./dist --out=./publish --platform=linux --asar --overwrite --icon=./dist/assets/logo.png'))
+        .pipe(exec('./node_modules/.bin/electron-packager ./dist --out=./publish --platform=linux --asar --overwrite --icon=./dist/assets/logo.png'))
         .pipe(exec.reporter());
 });
 
 
 gulp.task('build-publish-darwin', function() {
     return gulp.src('/')
-        .pipe(exec('electron-packager ./dist --out=./publish --platform=darwin --asar --overwrite --icon=./dist/assets/logo.png'))
+        .pipe(exec('./node_modules/.bin/electron-packager ./dist --out=./publish --platform=darwin --asar --overwrite --icon=./dist/assets/logo.png'))
         .pipe(exec.reporter());
 });
 

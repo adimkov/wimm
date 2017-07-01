@@ -24,7 +24,7 @@ interface AddSpendingContainerParam {
     date: Date;
 }
 
-class AddSpending extends React.Component<AddSpendingProp, void> {
+class AddSpending extends React.Component<AddSpendingProp, {}> {
     constructor(props?: AddSpendingProp, context?: any) {
             super(props, context);
    }
@@ -101,7 +101,7 @@ class CategoryOptionProp {
     color: string;
 }
 
-class CategoryOption extends React.Component<CategoryOptionProp, void> {
+class CategoryOption extends React.Component<CategoryOptionProp, {}> {
     constructor(props?: CategoryOptionProp, context?: any) {
             super(props, context);
     }
